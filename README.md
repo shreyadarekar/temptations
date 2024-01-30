@@ -1,2 +1,2 @@
 # temptations
-Temptations is an app to manage recipes.
+Temptations is an app to manage tempting recipes.

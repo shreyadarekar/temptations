@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Unit.init(
     {
-      unit: { allowNull: false, type: DataTypes.STRING },
+      unit: { allowNull: true, type: DataTypes.STRING },
     },
     {
       sequelize,

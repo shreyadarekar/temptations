@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   RecipeImage.init(
     {
       recipeId: { allowNull: false, type: DataTypes.INTEGER },
-      url: { allowNull: false, type: DataTypes.STRING },
+      url: { allowNull: false, type: DataTypes.TEXT },
       preview: { allowNull: false, type: DataTypes.BOOLEAN },
     },
     {

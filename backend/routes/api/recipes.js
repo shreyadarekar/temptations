@@ -1,5 +1,6 @@
 const express = require("express");
 const { check } = require("express-validator");
+const { PutObjectCommand } = require("@aws-sdk/client-s3");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
 const { s3Client, s3UploadError } = require("../../utils/awsS3");
 const {

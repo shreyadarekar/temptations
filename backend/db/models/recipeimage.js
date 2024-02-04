@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       recipeId: { allowNull: false, type: DataTypes.INTEGER },
       url: { allowNull: false, type: DataTypes.TEXT },
-      preview: { allowNull: false, type: DataTypes.BOOLEAN },
+      preview: {
+        allowNull: false,
+        defaultValue: false,
+        type: DataTypes.BOOLEAN,
+      },
     },
     {
       sequelize,

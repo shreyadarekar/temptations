@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const { environment } = require("./config");
 const routes = require("./routes");
 const { ValidationError } = require("sequelize");
+const fileUpload = require("express-fileupload");
 
 const isProduction = environment === "production";
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
+app.use(fileUpload());
 
 // Security Middleware
 if (!isProduction) {

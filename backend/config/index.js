@@ -7,4 +7,9 @@ module.exports = {
     secret: process.env.JWT_SECRET,
     expiresIn: process.env.JWT_EXPIRES_IN,
   },
+  s3Config: {
+    accessKeyId: process.env.S3_KEY || "",
+    secretAccessKey: process.env.S3_SECRET || "",
+    region: process.env.S3_REGION || "us-west-1",
+  },
 };

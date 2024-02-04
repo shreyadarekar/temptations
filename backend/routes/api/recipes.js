@@ -1,6 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
+const { s3Client, s3UploadError } = require("../../utils/awsS3");
 const {
   handleValidationErrors,
   validateReview,
@@ -116,7 +117,6 @@ router.post(
 // get a recipe
 router.get("/:recipeId", async (req, res) => {
   const recipe = await getFullRecipe(req.params.recipeId);
-
   if (!recipe) return recipeNotFound(req, res, next);
 
   const formattedRecipe = recipe.toJSON();
@@ -128,7 +128,6 @@ router.get("/:recipeId", async (req, res) => {
 // edit a recipe
 router.put("/:recipeId", [requireAuth, ...validateRecipe], async (req, res) => {
   const recipe = await getFullRecipe(req.params.recipeId);
-
   if (!recipe) return recipeNotFound(req, res, next);
 
   if (recipe.userId !== req.user.id) return forbiddenError(req, res, next);
@@ -195,7 +194,6 @@ router.post("/", [requireAuth, ...validateRecipe], async (req, res) => {
     cookTime,
     servings,
     directions,
-    images,
     ingredients,
     tags,
   } = req.body;
@@ -210,13 +208,28 @@ router.post("/", [requireAuth, ...validateRecipe], async (req, res) => {
     directions,
   });
 
-  // todo: add recipe images
+  const file = req.files.file;
+  const bucketParams = {
+    Bucket: process.env.S3_BUCKET,
+    Key: file.name,
+    Body: file.data,
+  };
+  try {
+    const data = await s3Client.send(new PutObjectCommand(bucketParams));
+    await newRecipe.addRecipeImage({ url: data.url });
+    console.log("s3 upload data :: ", data);
+  } catch (err) {
+    console.log("Error :: ", err);
+    return s3UploadError(req, res, next);
+  }
+
   await newRecipe.addRecipeIngredients(ingredients);
 
   if (tags.length) await newRecipe.addTags(tags);
 
-  // todo: return recipe with dependent models data
-  return res.status(201).json(newRecipe);
+  const recipe = await getFullRecipe(req.params.recipeId);
+  if (!recipe) return recipeNotFound(req, res, next);
+  return res.status(201).json(recipe);
 });
 
 // delete a recipe

@@ -71,4 +71,13 @@ const requireAuth = function (req, _res, next) {
   return next(err);
 };
 
-module.exports = { setTokenCookie, restoreUser, requireAuth };
+// forbiddenError
+const forbiddenError = function (_req, _res, next) {
+  const err = new Error("Forbidden");
+  err.title = "Require proper authorization";
+  err.errors = { message: "Forbidden" };
+  err.status = 403;
+  return next(err);
+};
+
+module.exports = { setTokenCookie, restoreUser, requireAuth, forbiddenError };

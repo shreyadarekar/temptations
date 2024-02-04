@@ -2,6 +2,8 @@
 const router = require("express").Router();
 const sessionRouter = require("./session.js");
 const usersRouter = require("./users.js");
+const unitsRouter = require("./units.js");
+const ingredientsRouter = require("./ingredients.js");
 const recipesRouter = require("./recipes.js");
 const { restoreUser } = require("../../utils/auth.js");
 
@@ -12,6 +14,8 @@ router.use(restoreUser);
 
 router.use("/session", sessionRouter);
 router.use("/users", usersRouter);
+router.use("/units", unitsRouter);
+router.use("/ingredients", ingredientsRouter);
 router.use("/recipes", recipesRouter);
 
 router.post("/test", (req, res) => {

@@ -1,10 +1,10 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
-import { useState } from 'react';
-import * as sessionActions from '../../store/session';
-import { useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import { useState } from "react";
+import * as sessionActions from "../../store/session";
+import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
+import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -27,33 +27,37 @@ function LoginFormModal() {
   };
 
   return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
+    <div className="login-modal-container">
+      <form className="login-modal-form" onSubmit={handleSubmit}>
+        <label className="login-modal-input">
+          <span>Username/Email</span>
           <input
             type="text"
+            placeholder="Enter Username or Email"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
           />
         </label>
-        <label>
-          Password
+
+        <label className="login-modal-input">
+          <span>Password</span>
           <input
             type="password"
+            placeholder="Enter Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+
+        {errors.credential && <p className="error">{errors.credential}</p>}
+
+        <button className="login-modal-button" type="submit">
+          Log In
+        </button>
       </form>
-    </>
+    </div>
   );
 }
 

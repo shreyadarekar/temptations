@@ -2,8 +2,32 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
+import StarRatings from "react-star-ratings";
 import { getRecipe } from "../../store/recipes";
 import "./RecipeDetails.css";
+
+const formatRecipeDate = (date) => {
+  let d = new Date(date),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+  const month = d.toLocaleString("default", { month: "long" });
+
+  if (day.length < 2) day = "0" + day;
+
+  return `${month} ${day}, ${year}`;
+};
+
+const formatReviewDate = (date) => {
+  let d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [month, day, year].join("/");
+};
 
 function RecipeDetails() {
   const { recipeId } = useParams();
@@ -32,10 +56,24 @@ function RecipeDetails() {
     <div className="recipe-details-container">
       <h1 className="recipe-details-name">{recipe.name}</h1>
 
-      <div className="recipe-details-upload-by-div">
-        uploaded by&nbsp;
-        <h4 className="recipe-details-username">{recipe.User.username}</h4>
+      <div className="recipe-details-reviews-summary">
+        <StarRatings
+          rating={recipe.avgRating}
+          starDimension="16px"
+          starSpacing="4px"
+          starRatedColor="lightcoral"
+        />
+        &nbsp;
+        {recipe.avgRating}&nbsp;|&nbsp;{recipe.Reviews.length}&nbsp; reviews
       </div>
+
+      <p className="recipe-details-description">{recipe.description}</p>
+
+      <p className="recipe-details-upload-by-p">
+        Uploaded by&nbsp;
+        <h4 className="recipe-details-username">{recipe.User.username}</h4>
+        &nbsp;|&nbsp;Updated on&nbsp;{formatRecipeDate(recipe.updatedAt)}
+      </p>
 
       <div className="recipe-details-tags">
         {recipe.Tags.map((tag, i) => (
@@ -52,8 +90,6 @@ function RecipeDetails() {
           </div>
         ))}
       </Carousel>
-
-      <h4 className="recipe-details-description">{recipe.description}</h4>
 
       <div className="recipe-details-time-servings">
         <div className="recipe-details-time-servings-single-box">
@@ -103,13 +139,21 @@ function RecipeDetails() {
 
       <div className="recipe-details-reviews">
         <h2>Reviews</h2>
-        <p>
-          {recipe.Reviews.length} reviews <span>{recipe.avgRating}</span>
-        </p>
         {recipe.Reviews.map((review, i) => (
-          <div key={i}>
+          <div key={i} className="recipe-details-reviews-single-review">
             <h4>{review.User.username}</h4>
-            <h5>{review.stars}</h5>
+            <p>
+              <StarRatings
+                rating={review.stars}
+                starDimension="14px"
+                starSpacing="2px"
+                starRatedColor="lightcoral"
+              />
+              &nbsp;
+              <span className="recipe-details-reviews-single-review-date">
+                {formatReviewDate(review.updatedAt)}
+              </span>
+            </p>
             <p>{review.content}</p>
           </div>
         ))}

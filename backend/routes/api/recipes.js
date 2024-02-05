@@ -34,7 +34,7 @@ const getFullRecipe = (recipeId) =>
       { model: RecipeImage, attributes: ["url", "preview"] },
       {
         model: Review,
-        attributes: ["stars", "content"],
+        // attributes: ["stars", "content"],
         include: [{ model: User, attributes: ["id", "username"] }],
       },
       {

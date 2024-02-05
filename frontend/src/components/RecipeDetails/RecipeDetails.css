@@ -10,10 +10,11 @@
   margin: 0;
 }
 
-.recipe-details-upload-by-div {
+.recipe-details-upload-by-p {
   margin: 0;
   display: flex;
   align-items: center;
+  font-size: 14px;
 }
 .recipe-details-username {
   margin: 0;
@@ -32,6 +33,7 @@
 
 .recipe-details-description {
   margin: 0;
+  width: 500px;
 }
 
 .recipe-details-time-servings {
@@ -66,4 +68,11 @@
 
 .recipe-details-reviews {
   width: 100%;
+}
+.recipe-details-reviews-single-review {
+  border-bottom: 1px solid lightcoral;
+}
+.recipe-details-reviews-single-review-date {
+  font-size: 12px;
+  color: gray;
 }

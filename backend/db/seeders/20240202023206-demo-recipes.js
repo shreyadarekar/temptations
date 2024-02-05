@@ -284,11 +284,7 @@ module.exports = {
       for (let recipeIngredient of ingredients) {
         const { name, unit, amount } = recipeIngredient;
 
-        const dbIngredient = await Ingredient.findOne({
-          where: { name },
-          logging: console.log,
-        });
-
+        const dbIngredient = await Ingredient.findOne({ where: { name } });
         const dbUnit = await Unit.findOne({ where: { unit } });
 
         await RecipeIngredient.create({

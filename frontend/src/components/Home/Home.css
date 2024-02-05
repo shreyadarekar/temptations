@@ -1,5 +1,30 @@
-.home-container {
+.recipes-grid {
+  display: grid;
+  grid: auto / repeat(auto-fill, 250px);
+  max-width: 1500px;
+  margin: 10px auto;
+}
+
+.recipe-div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-decoration: none;
+  color: black;
+  margin: 10px;
+}
+
+.recipe-image-div {
   display: flex;
   align-items: center;
-  justify-content: center;
+  height: 170px;
+  border: 1px solid black;
+}
+.recipe-image {
+  width: 100%;
+}
+
+.recipe-location-stars {
+  display: flex;
+  justify-content: space-between;
 }

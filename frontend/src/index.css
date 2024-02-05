@@ -12,3 +12,12 @@ button {
   color: darkred;
   margin: 0;
 }
+
+.carousel .thumbs {
+  justify-content: center;
+  display: flex;
+  padding: 0;
+}
+.carousel .thumbs-wrapper {
+  margin: 0;
+}

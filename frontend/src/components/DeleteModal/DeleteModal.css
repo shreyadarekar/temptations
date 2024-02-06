@@ -1,0 +1,28 @@
+.delete-modal-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  padding: 12px;
+}
+
+.delete-modal-buttons-div {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.delete-modal-button {
+  border-radius: 4px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.delete-modal-cancel-button {
+  border: 1px solid black;
+  background-color: white;
+}
+.delete-modal-delete-button {
+  border: none;
+  color: white;
+  background-color: darkred;
+}

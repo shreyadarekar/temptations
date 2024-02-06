@@ -12,6 +12,7 @@
   text-decoration: none;
   color: black;
   margin: 10px;
+  gap: 4px;
 }
 
 .recipe-image-div {

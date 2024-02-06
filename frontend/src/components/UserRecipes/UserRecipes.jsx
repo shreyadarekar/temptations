@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUserRecipes } from "../../store/recipes";
+import { deleteRecipe, getUserRecipes } from "../../store/recipes";
 import "./UserRecipes.css";
+import OpenModalButton from "../OpenModalButton";
+import DeleteModal from "../DeleteModal";
 
 function UserRecipes() {
   const dispatch = useDispatch();
@@ -41,9 +43,34 @@ function UserRecipes() {
             </div>
           </div>
           <div className="user-recipe-buttons-div">
-            <button onClick={() => navigate(`../recipes/${recipe.id}/edit`)}>
-              Edit
+            <button
+              className="user-recipe-button user-recipe-button-edit"
+              onClick={() => navigate(`../recipes/${recipe.id}/edit`)}
+            >
+              <i className="fa-solid fa-pen-to-square fa-sm" /> Edit
             </button>
+
+            <OpenModalButton
+              buttonText={
+                <>
+                  <i className="fa-solid fa-trash fa-sm" /> Delete
+                </>
+              }
+              className="recipe-details-reviews-single-button recipe-details-reviews-single-delete-button"
+              modalComponent={
+                <DeleteModal
+                  title="Delete Recipe"
+                  text={
+                    <>
+                      Are you sure you want to delete recipe:{" "}
+                      <span style={{ fontWeight: "bold" }}>{recipe.name}</span>{" "}
+                      ?
+                    </>
+                  }
+                  onDelete={() => deleteRecipe(recipe.id)}
+                />
+              }
+            />
           </div>
         </div>
       ))}

@@ -205,7 +205,17 @@ function RecipeDetails() {
                   className="recipe-details-reviews-single-button recipe-details-reviews-single-delete-button"
                   modalComponent={
                     <DeleteModal
-                      text="Are you sure you want to delete your review?"
+                      title="Delete Review"
+                      text={
+                        <>
+                          Are you sure you want to delete your review for
+                          recipe:{" "}
+                          <span style={{ fontWeight: "bold" }}>
+                            {recipe.name}
+                          </span>{" "}
+                          ?
+                        </>
+                      }
                       onDelete={() => deleteReview(recipeId, review.id)}
                     />
                   }

@@ -6,6 +6,7 @@ const ADD_REVIEW = "recipes/addReview";
 const EDIT_REVIEW = "recipes/editReview";
 const REMOVE_REVIEW = "recipes/removeReview";
 const SET_USER_RECIPES = "recipes/setUserRecipes";
+const REMOVE_RECIPE = "recipes/removeRecipe";
 
 const setRecipes = (recipes) => {
   return {
@@ -46,6 +47,13 @@ const setUserRecipes = (recipes) => {
   return {
     type: SET_USER_RECIPES,
     payload: recipes,
+  };
+};
+
+const removeRecipe = (recipeId) => {
+  return {
+    type: REMOVE_RECIPE,
+    payload: recipeId,
   };
 };
 
@@ -108,6 +116,14 @@ export const getUserRecipes = () => async (dispatch) => {
   const response = await csrfFetch("/api/recipes/current");
   const data = await response.json();
   dispatch(setUserRecipes(data.Recipes));
+  return response;
+};
+
+export const deleteRecipe = (recipeId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/recipes/${recipeId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) dispatch(removeRecipe(recipeId));
   return response;
 };
 
@@ -182,6 +198,16 @@ const recipesReducer = (state = initialState, action) => {
         return { ...acc, [recipe.id]: { ...exitingRecipe, ...recipe } };
       }, {});
       return { ...state, userEntries: recipes };
+    }
+
+    case REMOVE_RECIPE: {
+      const newEntries = { ...state.entries };
+      delete newEntries[action.payload];
+
+      const newUserEntries = { ...state.userEntries };
+      delete newUserEntries[action.payload];
+
+      return { ...state, entries: newEntries, userEntries: newUserEntries };
     }
 
     default:

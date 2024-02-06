@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import StarRatings from "react-star-ratings";
-import { getRecipe } from "../../store/recipes";
+import { deleteReview, getRecipe } from "../../store/recipes";
 import "./RecipeDetails.css";
+import OpenModalButton from "../OpenModalButton";
+import DeleteModal from "../DeleteModal";
 
 const formatRecipeDate = (date) => {
   let d = new Date(date),
@@ -32,12 +34,14 @@ const formatReviewDate = (date) => {
 function RecipeDetails() {
   const { recipeId } = useParams();
   const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
   const recipe = useSelector((state) => state.recipe.entries[recipeId]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (shouldFetch) {
+      setIsLoading(true);
       dispatch(getRecipe(recipeId)).then(() => {
         setShouldFetch(false);
         setIsLoading(false);
@@ -51,6 +55,10 @@ function RecipeDetails() {
   }, [dispatch, recipeId, shouldFetch]);
 
   if (isLoading) return <h1>Loading...</h1>;
+
+  const userAllowedToReview =
+    recipe.User.id !== sessionUser.id &&
+    !recipe.Reviews.find((r) => r.User.id === sessionUser.id);
 
   return (
     <div className="recipe-details-container">
@@ -71,7 +79,7 @@ function RecipeDetails() {
 
       <p className="recipe-details-upload-by-p">
         Uploaded by&nbsp;
-        <h4 className="recipe-details-username">{recipe.User.username}</h4>
+        <span className="recipe-details-username">{recipe.User.username}</span>
         &nbsp;|&nbsp;Updated on&nbsp;{formatRecipeDate(recipe.updatedAt)}
       </p>
 
@@ -139,10 +147,13 @@ function RecipeDetails() {
 
       <div className="recipe-details-reviews">
         <h2>Reviews</h2>
+
+        {userAllowedToReview && <button>Add a review</button>}
+
         {recipe.Reviews.map((review, i) => (
-          <div key={i} className="recipe-details-reviews-single-review">
+          <div key={i} className="recipe-details-reviews-single">
             <h4>{review.User.username}</h4>
-            <p>
+            <div>
               <StarRatings
                 rating={review.stars}
                 starDimension="14px"
@@ -150,11 +161,33 @@ function RecipeDetails() {
                 starRatedColor="lightcoral"
               />
               &nbsp;
-              <span className="recipe-details-reviews-single-review-date">
+              <span className="recipe-details-reviews-single-date">
                 {formatReviewDate(review.updatedAt)}
               </span>
-            </p>
+            </div>
             <p>{review.content}</p>
+            {review.User.id === sessionUser.id && (
+              <div className="recipe-details-reviews-single-buttons">
+                <button className="recipe-details-reviews-single-button recipe-details-reviews-single-edit-button">
+                  <i className="fa-solid fa-pen-to-square fa-sm" /> Edit
+                </button>
+
+                <OpenModalButton
+                  buttonText={
+                    <>
+                      <i className="fa-solid fa-trash fa-sm" /> Delete
+                    </>
+                  }
+                  className="recipe-details-reviews-single-button recipe-details-reviews-single-delete-button"
+                  modalComponent={
+                    <DeleteModal
+                      text="Are you sure you want to delete your review?"
+                      onDelete={() => deleteReview(recipeId, review.id)}
+                    />
+                  }
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>

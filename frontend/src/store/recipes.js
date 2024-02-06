@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const SET_RECIPES = "recipes/setRecipes";
 const SET_RECIPE = "recipes/setRecipe";
+const REMOVE_REVIEW = "recipes/removeReview";
 
 const setRecipes = (recipes) => {
   return {
@@ -14,6 +15,13 @@ const setRecipe = (recipe) => {
   return {
     type: SET_RECIPE,
     payload: recipe,
+  };
+};
+
+const removeReview = (recipeId, reviewId) => {
+  return {
+    type: REMOVE_REVIEW,
+    payload: { recipeId, reviewId },
   };
 };
 
@@ -42,6 +50,14 @@ export const postRecipe = (recipe) => async (dispatch) => {
   return data;
 };
 
+export const deleteReview = (recipeId, reviewId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) dispatch(removeReview(recipeId, reviewId));
+  return response;
+};
+
 const initialState = { entries: {} };
 const recipesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -60,6 +76,20 @@ const recipesReducer = (state = initialState, action) => {
         entries: {
           ...state.entries,
           [action.payload.id]: { ...exitingRecipe, ...action.payload },
+        },
+      };
+    }
+
+    case REMOVE_REVIEW: {
+      const exitingRecipe = { ...state.entries[action.payload.recipeId] };
+      exitingRecipe.Reviews = exitingRecipe.Reviews.filter(
+        (r) => r.id !== action.payload.reviewId
+      );
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.recipeId]: { ...exitingRecipe },
         },
       };
     }

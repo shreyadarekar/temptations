@@ -13,7 +13,7 @@ function NewRecipe() {
   const emptyIngredient = {
     amount: 0.1,
     unitId: 1,
-    ingredientId: 0,
+    ingredientId: "",
   };
 
   const ingredientsEntries = useSelector((state) => state.ingredient.entries);
@@ -249,7 +249,7 @@ function NewRecipe() {
                 }}
                 required
               >
-                <option key={-1} value={0}>
+                <option key={-1} value="">
                   ---Select---
                 </option>
                 {allIngredients.map((ing, i) => (

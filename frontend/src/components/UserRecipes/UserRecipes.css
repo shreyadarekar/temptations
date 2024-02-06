@@ -1,11 +1,11 @@
-.recipes-grid {
+.user-recipes-grid {
   display: grid;
   grid: auto / repeat(auto-fill, 250px);
   max-width: 1500px;
   margin: 10px auto;
 }
 
-.recipe-div {
+.user-recipe-div {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -14,17 +14,17 @@
   margin: 10px;
 }
 
-.recipe-image-div {
+.user-recipe-image-div {
   display: flex;
   align-items: center;
   height: 170px;
   border: 1px solid black;
 }
-.recipe-image {
+.user-recipe-image {
   width: 100%;
 }
 
-.recipe-name-stars {
+.user-recipe-name-stars {
   display: flex;
   justify-content: space-between;
 }

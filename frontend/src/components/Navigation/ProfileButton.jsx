@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
 function ProfileButton({ user }) {
@@ -34,7 +34,7 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout()).then(() => {
       closeMenu();
-      navigate("/");
+      navigate("/", { relative: "route" });
     });
   };
 
@@ -49,9 +49,21 @@ function ProfileButton({ user }) {
           style={{ color: "lightcoral" }}
         />
       </button>
+
       <div className={profileDropdownClassName} ref={ulRef}>
-        <div>Hello, {user.username}</div>
-        <div>{user.email}</div>
+        <div className="profile-dropdown-group">
+          <div>Hello, {user.username}</div>
+          <div>{user.email}</div>
+        </div>
+        <div className="profile-dropdown-group">
+          <NavLink
+            to="/recipes/current"
+            className="profile-dropdown-link"
+            onClick={closeMenu}
+          >
+            My Recipes
+          </NavLink>
+        </div>
         <button className="logout-button" onClick={logout}>
           Log Out
         </button>

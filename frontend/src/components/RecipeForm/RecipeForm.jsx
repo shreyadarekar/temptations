@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "./NewRecipe.css";
-import { postRecipe } from "../../store/recipes";
+import { useNavigate, useParams } from "react-router-dom";
+import { getRecipe, postRecipe } from "../../store/recipes";
+import "./RecipeForm.css";
 
-function NewRecipe() {
+function RecipeForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { recipeId } = useParams();
+  const existingRecipe = useSelector((state) => state.recipe.entries[recipeId]);
+  const [shouldFetch, setShouldFetch] = useState(!existingRecipe);
+  const [isLoading, setIsLoading] = useState(true);
 
   const unitsEntries = useSelector((state) => state.unit.entries);
   const allUnits = Object.values(unitsEntries);
@@ -31,6 +36,37 @@ function NewRecipe() {
     images: [],
   });
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (shouldFetch) {
+      setIsLoading(true);
+      dispatch(getRecipe(recipeId)).then((res) => {
+        setRecipe({
+          name: res.name,
+          description: res.description,
+          tags: res.Tags.map((t) => t.title),
+          prepTime: res.prepTime,
+          cookTime: res.cookTime,
+          servings: res.servings,
+          ingredients: res.RecipeIngredients.map((ri) => ({
+            amount: ri.amount,
+            unitId: ri.unitId,
+            ingredientId: ri.ingredientId,
+          })),
+          directions: res.directions,
+          images: [],
+        });
+        setShouldFetch(false);
+        setIsLoading(false);
+      });
+    }
+
+    () => {
+      setIsLoading(true);
+    };
+  }, [dispatch, existingRecipe, recipeId, shouldFetch]);
+
+  if (isLoading) return <h1>Loading...</h1>;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,16 +117,16 @@ function NewRecipe() {
 
   return (
     <form
-      className="upload-recipe-form"
+      className="recipe-form"
       encType="multipart/form-data"
       onSubmit={handleSubmit}
     >
-      <div className="upload-recipe-label-input-pair">
-        <label htmlFor="title" className="upload-recipe-label">
+      <div className="recipe-label-input-pair">
+        <label htmlFor="title" className="recipe-label">
           Title
         </label>
         <input
-          className="upload-recipe-title"
+          className="recipe-title"
           type="text"
           maxLength={100}
           placeholder="Provide an eye catching title for your recipe"
@@ -101,12 +137,12 @@ function NewRecipe() {
         />
       </div>
 
-      <div className="upload-recipe-label-input-pair">
-        <label htmlFor="description" className="upload-recipe-label">
+      <div className="recipe-label-input-pair">
+        <label htmlFor="description" className="recipe-label">
           Description
         </label>
         <textarea
-          className="upload-recipe-description"
+          className="recipe-description"
           type="textarea"
           rows="6"
           cols="33"
@@ -121,13 +157,13 @@ function NewRecipe() {
         />
       </div>
 
-      <div className="upload-recipe-time-servings">
-        <div className="upload-recipe-label-input-pair">
-          <label htmlFor="prepTime" className="upload-recipe-label">
+      <div className="recipe-time-servings">
+        <div className="recipe-label-input-pair">
+          <label htmlFor="prepTime" className="recipe-label">
             Prep Time
           </label>
           <input
-            className="upload-recipe-prepTime"
+            className="recipe-prepTime"
             type="number"
             min="0"
             value={recipe.prepTime}
@@ -136,12 +172,12 @@ function NewRecipe() {
           />
         </div>
 
-        <div className="upload-recipe-label-input-pair">
-          <label htmlFor="cookTime" className="upload-recipe-label">
+        <div className="recipe-label-input-pair">
+          <label htmlFor="cookTime" className="recipe-label">
             Cook Time
           </label>
           <input
-            className="upload-recipe-cookTime"
+            className="recipe-cookTime"
             type="number"
             min="0"
             value={recipe.cookTime}
@@ -150,12 +186,12 @@ function NewRecipe() {
           />
         </div>
 
-        <div className="upload-recipe-label-input-pair">
-          <label htmlFor="servings" className="upload-recipe-label">
+        <div className="recipe-label-input-pair">
+          <label htmlFor="servings" className="recipe-label">
             Servings
           </label>
           <input
-            className="upload-recipe-servings"
+            className="recipe-servings"
             type="number"
             min="1"
             value={recipe.servings}
@@ -165,15 +201,15 @@ function NewRecipe() {
         </div>
       </div>
 
-      <div className="upload-recipe-label-input-pair">
-        <label htmlFor="tags" className="upload-recipe-label">
+      <div className="recipe-label-input-pair">
+        <label htmlFor="tags" className="recipe-label">
           Tags
         </label>
         <span style={{ fontSize: "14px" }}>
           Add tags (if any) to your recipe
         </span>
 
-        <div id="tags" className="upload-recipe-tags-grid">
+        <div id="tags" className="recipe-tags-grid">
           <TagCheckbox label="Indian" value="indian" />
           <TagCheckbox label="American" value="american" />
           <TagCheckbox label="Italian" value="italian" />
@@ -187,24 +223,24 @@ function NewRecipe() {
         </div>
       </div>
 
-      <div className="upload-recipe-label-input-pair">
-        <label className="upload-recipe-label">Ingredients</label>
+      <div className="recipe-label-input-pair">
+        <label className="recipe-label">Ingredients</label>
         <span style={{ fontSize: "14px" }}>
           Add ingredients for your recipe
         </span>
 
-        <div className="upload-recipe-ingredients-header">
-          <h5 className="upload-recipe-ingredients-input">Amount</h5>
-          <h5 className="upload-recipe-ingredients-select">Unit</h5>
-          <h5 className="upload-recipe-ingredients-select">Ingredient</h5>
-          <h5 className="upload-recipe-ingredients-add-new"></h5>
+        <div className="recipe-ingredients-header">
+          <h5 className="recipe-ingredients-input">Amount</h5>
+          <h5 className="recipe-ingredients-select">Unit</h5>
+          <h5 className="recipe-ingredients-select">Ingredient</h5>
+          <h5 className="recipe-ingredients-add-new"></h5>
         </div>
 
-        <div className="upload-recipe-ingredients-inputs-container">
+        <div className="recipe-ingredients-inputs-container">
           {recipe.ingredients.map((ing, ingIdx) => (
-            <div key={ingIdx} className="upload-recipe-ingredients-inputs">
+            <div key={ingIdx} className="recipe-ingredients-inputs">
               <input
-                className="upload-recipe-ingredients-input"
+                className="recipe-ingredients-input"
                 type="number"
                 min="0.1"
                 step="0.1"
@@ -220,7 +256,8 @@ function NewRecipe() {
               />
 
               <select
-                className="upload-recipe-ingredients-select"
+                className="recipe-ingredients-select"
+                value={ing.unitId}
                 onChange={(e) => {
                   const existingIngredients = [...recipe.ingredients];
                   existingIngredients[ingIdx] = {
@@ -238,7 +275,8 @@ function NewRecipe() {
               </select>
 
               <select
-                className="upload-recipe-ingredients-select"
+                className="recipe-ingredients-select"
+                value={ing.ingredientId}
                 onChange={(e) => {
                   const existingIngredients = [...recipe.ingredients];
                   existingIngredients[ingIdx] = {
@@ -260,7 +298,7 @@ function NewRecipe() {
               </select>
 
               <button
-                className="upload-recipe-ingredients-add-new upload-recipe-ingredients-add-new-button"
+                className="recipe-ingredients-add-new recipe-ingredients-add-new-button"
                 type="button"
                 onClick={() => {
                   const existingIngredients = [...recipe.ingredients];
@@ -288,12 +326,12 @@ function NewRecipe() {
         </div>
       </div>
 
-      <div className="upload-recipe-label-input-pair">
-        <label htmlFor="directions" className="upload-recipe-label">
+      <div className="recipe-label-input-pair">
+        <label htmlFor="directions" className="recipe-label">
           Directions
         </label>
         <textarea
-          className="upload-recipe-directions"
+          className="recipe-directions"
           type="textarea"
           rows="6"
           cols="33"
@@ -306,8 +344,8 @@ function NewRecipe() {
         />
       </div>
 
-      <div className="upload-recipe-label-input-pair">
-        <label htmlFor="images" className="upload-recipe-label">
+      <div className="recipe-label-input-pair">
+        <label htmlFor="images" className="recipe-label">
           Images
         </label>
         <span style={{ fontSize: "14px" }}>Add images to your recipe</span>
@@ -325,11 +363,11 @@ function NewRecipe() {
 
       {errors.message && <p className="error">{errors.message}</p>}
 
-      <button className="upload-recipe-submit-button" type="submit">
+      <button className="recipe-submit-button" type="submit">
         Upload Recipe
       </button>
     </form>
   );
 }
 
-export default NewRecipe;
+export default RecipeForm;

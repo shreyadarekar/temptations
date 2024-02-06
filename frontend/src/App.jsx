@@ -7,7 +7,8 @@ import Home from "./components/Home";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import { getIngredients } from "./store/ingredients";
 import { getUnits } from "./store/units";
-import NewRecipe from "./components/NewRecipe/NewRecipe";
+import RecipeForm from "./components/RecipeForm/RecipeForm";
+import UserRecipes from "./components/UserRecipes/UserRecipes";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,8 +35,10 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/recipes/new", element: <RecipeForm /> },
+      { path: "/recipes/current", element: <UserRecipes /> },
       { path: "/recipes/:recipeId", element: <RecipeDetails /> },
-      { path: "/recipes/new", element: <NewRecipe /> },
+      { path: "/recipes/:recipeId/edit", element: <RecipeForm /> },
     ],
   },
 ]);

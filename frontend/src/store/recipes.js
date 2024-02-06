@@ -5,6 +5,7 @@ const SET_RECIPE = "recipes/setRecipe";
 const ADD_REVIEW = "recipes/addReview";
 const EDIT_REVIEW = "recipes/editReview";
 const REMOVE_REVIEW = "recipes/removeReview";
+const SET_USER_RECIPES = "recipes/setUserRecipes";
 
 const setRecipes = (recipes) => {
   return {
@@ -41,6 +42,13 @@ const removeReview = (recipeId, reviewId) => {
   };
 };
 
+const setUserRecipes = (recipes) => {
+  return {
+    type: SET_USER_RECIPES,
+    payload: recipes,
+  };
+};
+
 export const getRecipes = () => async (dispatch) => {
   const response = await csrfFetch("/api/recipes");
   const data = await response.json();
@@ -52,7 +60,7 @@ export const getRecipe = (recipeId) => async (dispatch) => {
   const response = await csrfFetch(`/api/recipes/${recipeId}`);
   const data = await response.json();
   dispatch(setRecipe(data));
-  return response;
+  return data;
 };
 
 export const postRecipe = (recipe) => async (dispatch) => {
@@ -96,7 +104,14 @@ export const deleteReview = (recipeId, reviewId) => async (dispatch) => {
   return response;
 };
 
-const initialState = { entries: {} };
+export const getUserRecipes = () => async (dispatch) => {
+  const response = await csrfFetch("/api/recipes/current");
+  const data = await response.json();
+  dispatch(setUserRecipes(data.Recipes));
+  return response;
+};
+
+const initialState = { entries: {}, userEntries: {} };
 const recipesReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_RECIPES: {
@@ -159,6 +174,14 @@ const recipesReducer = (state = initialState, action) => {
           [action.payload.recipeId]: { ...exitingRecipe },
         },
       };
+    }
+
+    case SET_USER_RECIPES: {
+      const recipes = action.payload.reduce((acc, recipe) => {
+        const exitingRecipe = state.entries[recipe.id];
+        return { ...acc, [recipe.id]: { ...exitingRecipe, ...recipe } };
+      }, {});
+      return { ...state, userEntries: recipes };
     }
 
     default:

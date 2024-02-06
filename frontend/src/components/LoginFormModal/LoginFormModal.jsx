@@ -39,6 +39,7 @@ function LoginFormModal() {
             required
           />
         </label>
+        {errors.credential && <p className="error">{errors.credential}</p>}
 
         <label className="login-modal-input">
           <span>Password</span>
@@ -50,8 +51,7 @@ function LoginFormModal() {
             required
           />
         </label>
-
-        {errors.credential && <p className="error">{errors.credential}</p>}
+        {errors.password && <p className="error">{errors.password}</p>}
 
         <button className="login-modal-button" type="submit">
           Log In

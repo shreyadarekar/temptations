@@ -1,38 +1,35 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
-import { getRecipes } from "../../store/recipes";
-import "./Home.css";
+import { useNavigate } from "react-router-dom";
+import { getUserRecipes } from "../../store/recipes";
+import "./UserRecipes.css";
 
-function Home() {
+function UserRecipes() {
   const dispatch = useDispatch();
-  const recipeEntries = useSelector((state) => state.recipe.entries);
+  const navigate = useNavigate();
+
+  const recipeEntries = useSelector((state) => state.recipe.userEntries);
   const recipes = Object.values(recipeEntries);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(getRecipes()).then(() => setIsLoading(false));
+    dispatch(getUserRecipes()).then(() => setIsLoading(false));
   }, [dispatch]);
 
   if (isLoading) return <h1>Loading...</h1>;
 
   return (
-    <div className="recipes-grid">
+    <div className="user-recipes-grid">
       {recipes.map((recipe) => (
-        <NavLink
-          key={recipe.id}
-          className="recipe-div"
-          to={`/recipes/${recipe.id}`}
-          title={recipe.name}
-        >
-          <div className="recipe-image-div">
+        <div key={recipe.id} className="user-recipe-div">
+          <div className="user-recipe-image-div">
             <img
-              className="recipe-image"
+              className="user-recipe-image"
               src={recipe.RecipeImages.length ? recipe.RecipeImages[0].url : ""}
               alt="preview"
             />
           </div>
-          <div className="recipe-name-stars">
+          <div className="user-recipe-name-stars">
             <div>
               <span style={{ fontWeight: "bold" }}>{recipe.name}</span>
             </div>
@@ -43,14 +40,15 @@ function Home() {
               </span>
             </div>
           </div>
-          <div style={{ fontSize: "14px" }}>
-            by{" "}
-            <span style={{ fontWeight: "bold" }}>{recipe.User.username}</span>
+          <div className="user-recipe-buttons-div">
+            <button onClick={() => navigate(`../recipes/${recipe.id}/edit`)}>
+              Edit
+            </button>
           </div>
-        </NavLink>
+        </div>
       ))}
     </div>
   );
 }
 
-export default Home;
+export default UserRecipes;

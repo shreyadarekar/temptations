@@ -127,6 +127,26 @@ router.post(
   }
 );
 
+// get current user's recipes
+router.get("/current", async (req, res) => {
+  const recipes = await Recipe.findAll({
+    where: { userId: req.user.id },
+    order: [["updatedAt", "desc"]],
+    include: [
+      { model: RecipeImage, attributes: ["url", "preview"] },
+      { model: Review, attributes: ["stars"] },
+    ],
+  });
+
+  const formattedRecipes = recipes.reduce((acc, rec) => {
+    const { Reviews, ...recipe } = rec.toJSON();
+    acc.push({ ...recipe, avgRating: getAvgRating(Reviews) });
+    return acc;
+  }, []);
+
+  return res.json({ Recipes: formattedRecipes });
+});
+
 // get a recipe
 router.get("/:recipeId", async (req, res) => {
   const recipe = await getFullRecipe(req.params.recipeId);

@@ -10,7 +10,7 @@ function RecipeForm() {
 
   const { recipeId } = useParams();
   const existingRecipe = useSelector((state) => state.recipe.entries[recipeId]);
-  const [shouldFetch, setShouldFetch] = useState(!existingRecipe);
+  const [shouldFetch, setShouldFetch] = useState(!!existingRecipe);
   const [isLoading, setIsLoading] = useState(true);
 
   const unitsEntries = useSelector((state) => state.unit.entries);
@@ -41,6 +41,8 @@ function RecipeForm() {
     if (shouldFetch) {
       setIsLoading(true);
       dispatch(getRecipe(recipeId)).then((res) => {
+        setShouldFetch(false);
+        setIsLoading(false);
         setRecipe({
           name: res.name,
           description: res.description,
@@ -56,8 +58,6 @@ function RecipeForm() {
           directions: res.directions,
           images: [],
         });
-        setShouldFetch(false);
-        setIsLoading(false);
       });
     }
 

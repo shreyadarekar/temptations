@@ -31,6 +31,17 @@ export const getRecipe = (recipeId) => async (dispatch) => {
   return response;
 };
 
+export const postRecipe = (recipe) => async (dispatch) => {
+  const response = await csrfFetch(`/api/recipes`, {
+    method: "POST",
+    body: recipe,
+    // headers: { "Content-Type": "multipart/form-data" },
+  });
+  const data = await response.json();
+  dispatch(setRecipe(data));
+  return data;
+};
+
 const initialState = { entries: {} };
 const recipesReducer = (state = initialState, action) => {
   switch (action.type) {

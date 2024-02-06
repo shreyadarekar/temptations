@@ -5,7 +5,7 @@
 .nav-header {
   display: flex;
   justify-content: space-between;
-  padding: 8px;
+  padding: 0 8px;
   height: 50px;
   box-sizing: border-box;
   background-color: rgb(49, 46, 46);
@@ -25,12 +25,27 @@
   color: lightcoral;
   font-size: 24px;
   font-weight: bold;
+  padding: 0 8px;
+}
+
+a.active {
+  color: white;
+  background-color: lightcoral;
 }
 
 .nav-header-right {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.upload-recipe-button {
+  color: white;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
 }
 
 .nav-header-button {
@@ -40,6 +55,7 @@
   width: 150px;
   height: 30px;
 }
+
 .login-button {
   color: coral;
 }
@@ -69,6 +85,7 @@
   flex-direction: column;
   gap: 5px;
   padding: 12px;
+  background: white;
 }
 
 .logout-button {

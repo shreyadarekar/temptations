@@ -1,8 +1,8 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
 import { useState } from "react";
-import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
 import { useModal } from "../../context/Modal";
 import "./LoginForm.css";
 

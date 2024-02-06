@@ -13,14 +13,20 @@ function Navigation({ isLoaded }) {
 
   return (
     <nav className="nav-header">
-      <NavLink className="home-button" to="/">
+      <NavLink to="/" className="home-button">
         <img className="logo" src="../../logo.png" alt="logo" />
         Temptations
       </NavLink>
 
       <div className="nav-header-right">
         {isLoaded && sessionUser ? (
-          <ProfileButton user={sessionUser} />
+          <>
+            <NavLink to="/recipes/new" className="upload-recipe-button">
+              <i className="fa-solid fa-arrow-up-from-bracket"></i>
+              &nbsp; Upload a Recipe
+            </NavLink>
+            <ProfileButton user={sessionUser} />
+          </>
         ) : (
           <>
             <OpenModalButton

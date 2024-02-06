@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import { getIngredients } from "./store/ingredients";
 import { getUnits } from "./store/units";
+import NewRecipe from "./components/NewRecipe/NewRecipe";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/recipes/:recipeId", element: <RecipeDetails /> },
+      { path: "/recipes/new", element: <NewRecipe /> },
     ],
   },
 ]);

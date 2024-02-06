@@ -28,7 +28,7 @@ function Home() {
           <div className="recipe-image-div">
             <img
               className="recipe-image"
-              src={recipe.RecipeImages[0].url}
+              src={recipe.RecipeImages.length ? recipe.RecipeImages[0].url : ""}
               alt="preview"
             />
           </div>

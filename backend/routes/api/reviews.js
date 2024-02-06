@@ -1,5 +1,5 @@
 const express = require("express");
-const { Review } = require("../../db/models");
+const { Review, User } = require("../../db/models");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
 const { validateReview } = require("../../utils/validation");
 
@@ -24,9 +24,13 @@ router.put(
 
     if (review.userId !== req.user.id) return forbiddenError(req, res, next);
 
-    const updatedReview = await review.update(req.body);
+    await review.update(req.body);
 
-    return res.json(updatedReview);
+    const fullReview = await Review.findByPk(review.id, {
+      include: [{ model: User, attributes: ["id", "username"] }],
+    });
+
+    return res.json(fullReview);
   }
 );
 

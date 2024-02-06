@@ -2,6 +2,8 @@ import { csrfFetch } from "./csrf";
 
 const SET_RECIPES = "recipes/setRecipes";
 const SET_RECIPE = "recipes/setRecipe";
+const ADD_REVIEW = "recipes/addReview";
+const EDIT_REVIEW = "recipes/editReview";
 const REMOVE_REVIEW = "recipes/removeReview";
 
 const setRecipes = (recipes) => {
@@ -15,6 +17,20 @@ const setRecipe = (recipe) => {
   return {
     type: SET_RECIPE,
     payload: recipe,
+  };
+};
+
+const addReview = (review) => {
+  return {
+    type: ADD_REVIEW,
+    payload: review,
+  };
+};
+
+const editReview = (review) => {
+  return {
+    type: EDIT_REVIEW,
+    payload: review,
   };
 };
 
@@ -50,6 +66,28 @@ export const postRecipe = (recipe) => async (dispatch) => {
   return data;
 };
 
+export const postReview = (recipeId, review) => async (dispatch) => {
+  const response = await csrfFetch(`/api/recipes/${recipeId}/reviews`, {
+    method: "POST",
+    body: JSON.stringify(review),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  dispatch(addReview(data));
+  return response;
+};
+
+export const putReview = (reviewId, review) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${reviewId}`, {
+    method: "PUT",
+    body: JSON.stringify(review),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  dispatch(editReview(data));
+  return response;
+};
+
 export const deleteReview = (recipeId, reviewId) => async (dispatch) => {
   const response = await csrfFetch(`/api/reviews/${reviewId}`, {
     method: "DELETE",
@@ -76,6 +114,35 @@ const recipesReducer = (state = initialState, action) => {
         entries: {
           ...state.entries,
           [action.payload.id]: { ...exitingRecipe, ...action.payload },
+        },
+      };
+    }
+
+    case ADD_REVIEW: {
+      const exitingRecipe = {
+        ...state.entries[action.payload.recipeId],
+      };
+      exitingRecipe.Reviews.unshift(action.payload);
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.recipeId]: { ...exitingRecipe },
+        },
+      };
+    }
+
+    case EDIT_REVIEW: {
+      const exitingRecipe = { ...state.entries[action.payload.recipeId] };
+      exitingRecipe.Reviews = exitingRecipe.Reviews.filter(
+        (r) => r.id !== action.payload.id
+      );
+      exitingRecipe.Reviews.unshift(action.payload);
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.recipeId]: { ...exitingRecipe },
         },
       };
     }

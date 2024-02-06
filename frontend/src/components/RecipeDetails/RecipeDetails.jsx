@@ -7,6 +7,7 @@ import { deleteReview, getRecipe } from "../../store/recipes";
 import "./RecipeDetails.css";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
+import ReviewFormModal from "../ReviewFormModal/ReviewFormModal";
 
 const formatRecipeDate = (date) => {
   let d = new Date(date),
@@ -148,7 +149,17 @@ function RecipeDetails() {
       <div className="recipe-details-reviews">
         <h2>Reviews</h2>
 
-        {userAllowedToReview && <button>Add a review</button>}
+        {userAllowedToReview && (
+          <OpenModalButton
+            buttonText={
+              <>
+                <i className="fa-solid fa-pen-to-square fa-sm" /> Post a review
+              </>
+            }
+            className="recipe-details-reviews-single-button recipe-details-reviews-single-edit-button"
+            modalComponent={<ReviewFormModal recipeId={recipeId} />}
+          />
+        )}
 
         {recipe.Reviews.map((review, i) => (
           <div key={i} className="recipe-details-reviews-single">
@@ -168,9 +179,22 @@ function RecipeDetails() {
             <p>{review.content}</p>
             {review.User.id === sessionUser.id && (
               <div className="recipe-details-reviews-single-buttons">
-                <button className="recipe-details-reviews-single-button recipe-details-reviews-single-edit-button">
-                  <i className="fa-solid fa-pen-to-square fa-sm" /> Edit
-                </button>
+                <OpenModalButton
+                  buttonText={
+                    <>
+                      <i className="fa-solid fa-pen-to-square fa-sm" /> Edit
+                    </>
+                  }
+                  className="recipe-details-reviews-single-button recipe-details-reviews-single-edit-button"
+                  modalComponent={
+                    <ReviewFormModal
+                      recipeId={recipeId}
+                      reviewId={review.id}
+                      inContent={review.content}
+                      inStars={review.stars}
+                    />
+                  }
+                />
 
                 <OpenModalButton
                   buttonText={

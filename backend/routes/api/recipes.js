@@ -100,7 +100,7 @@ router.post(
     if (!recipe) return recipeNotFound(req, res, next);
 
     const existingReview = await Review.findOne({
-      where: { userId: req.user.id, spotId: req.params.spotId },
+      where: { userId: req.user.id, recipeId: req.params.recipeId },
     });
     if (existingReview) {
       const err = new Error("User already has a review for this spot");
@@ -110,13 +110,20 @@ router.post(
       return next(err);
     }
 
+    const { stars, content } = req.body;
+
     const newReview = await Review.create({
       userId: req.user.id,
-      spotId: req.params.spotId,
-      ...req.body,
+      recipeId: req.params.recipeId,
+      stars,
+      content,
     });
 
-    return res.status(201).json(newReview);
+    const fullReview = await Review.findByPk(newReview.id, {
+      include: [{ model: User, attributes: ["id", "username"] }],
+    });
+
+    return res.status(201).json(fullReview);
   }
 );
 

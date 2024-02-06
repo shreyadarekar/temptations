@@ -36,11 +36,10 @@ const getAvgRating = (Reviews) => {
 const getFullRecipe = (recipeId) =>
   Recipe.findByPk(recipeId, {
     include: [
-      { model: User, attributes: ["username"] },
+      { model: User, attributes: ["id", "username"] },
       { model: RecipeImage, attributes: ["url", "preview"] },
       {
         model: Review,
-        // attributes: ["stars", "content"],
         include: [{ model: User, attributes: ["id", "username"] }],
       },
       {
@@ -191,71 +190,75 @@ router.get("/", async (req, res) => {
 });
 
 // add a recipe
-router.post("/", [requireAuth, imagesUpload], async (req, res, next) => {
-  const { user } = req;
-  const {
-    name,
-    description,
-    prepTime,
-    cookTime,
-    servings,
-    directions,
-    ingredients,
-    tags,
-  } = req.body;
-
-  const t = await sequelize.transaction();
-
-  try {
-    const newRecipe = await Recipe.create({
-      userId: user.id,
+router.post(
+  "/",
+  [requireAuth, ...validateRecipe, imagesUpload],
+  async (req, res, next) => {
+    const { user } = req;
+    const {
       name,
       description,
       prepTime,
       cookTime,
       servings,
       directions,
-    });
+      ingredients,
+      tags,
+    } = req.body;
 
-    for (file of req.files) {
-      const bucketParams = {
-        Bucket: process.env.S3_BUCKET,
-        Key: file.originalname,
-        Body: file.buffer,
-      };
-      try {
-        await s3Client.send(new PutObjectCommand(bucketParams));
-      } catch (err) {
-        await t.rollback();
-        return s3UploadError(req, res, next);
-      }
-      await newRecipe.createRecipeImage({
-        url: formS3ObjectUrl(file.originalname),
+    const t = await sequelize.transaction();
+
+    try {
+      const newRecipe = await Recipe.create({
+        userId: user.id,
+        name,
+        description,
+        prepTime,
+        cookTime,
+        servings,
+        directions,
       });
+
+      for (file of req.files) {
+        const bucketParams = {
+          Bucket: process.env.S3_BUCKET,
+          Key: file.originalname,
+          Body: file.buffer,
+        };
+        try {
+          await s3Client.send(new PutObjectCommand(bucketParams));
+        } catch (err) {
+          await t.rollback();
+          return s3UploadError(req, res, next);
+        }
+        await newRecipe.createRecipeImage({
+          url: formS3ObjectUrl(file.originalname),
+        });
+      }
+
+      console.log(" >>>> ingredients ::", ingredients);
+      for (ing of JSON.parse(ingredients)) {
+        console.log(" >>>> ing ::", ing);
+        await newRecipe.createRecipeIngredient(ing);
+      }
+
+      console.log(" >>>> tags ::", tags);
+      for (tag of JSON.parse(tags)) {
+        console.log(" >>>> tag ::", tag);
+        await newRecipe.createTag(tag);
+      }
+
+      await t.commit();
+
+      const recipe = await getFullRecipe(newRecipe.id);
+      if (!recipe) return recipeNotFound(req, res, next);
+      return res.status(201).json(recipe);
+    } catch (error) {
+      await t.rollback();
+      return next(error);
     }
-
-    console.log(" >>>> ingredients ::", ingredients);
-    for (ing of JSON.parse(ingredients)) {
-      console.log(" >>>> ing ::", ing);
-      await newRecipe.createRecipeIngredient(ing);
-    }
-
-    console.log(" >>>> tags ::", tags);
-    for (tag of JSON.parse(tags)) {
-      console.log(" >>>> tag ::", tag);
-      await newRecipe.createTag(tag);
-    }
-
-    await t.commit();
-
-    const recipe = await getFullRecipe(newRecipe.id);
-    if (!recipe) return recipeNotFound(req, res, next);
-    return res.status(201).json(recipe);
-  } catch (error) {
-    await t.rollback();
-    return next(error);
   }
-});
+);
 
 // delete a recipe
 router.delete("/:recipeId", requireAuth, async (req, res, next) => {

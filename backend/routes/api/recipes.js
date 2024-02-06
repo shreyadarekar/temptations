@@ -2,7 +2,12 @@ const express = require("express");
 const { check } = require("express-validator");
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
-const { s3Client, s3UploadError } = require("../../utils/awsS3");
+const {
+  s3Client,
+  s3UploadError,
+  formS3ObjectUrl,
+} = require("../../utils/awsS3");
+const { imagesUpload } = require("../../utils/multer");
 const {
   handleValidationErrors,
   validateReview,
@@ -16,6 +21,7 @@ const {
   RecipeIngredient,
   Ingredient,
   Unit,
+  sequelize,
 } = require("../../db/models");
 
 const router = express.Router();
@@ -140,7 +146,6 @@ router.put("/:recipeId", [requireAuth, ...validateRecipe], async (req, res) => {
     cookTime,
     servings,
     directions,
-    images,
     ingredients,
     tags,
   } = req.body;
@@ -168,7 +173,7 @@ router.get("/", async (req, res) => {
       { model: User, attributes: ["username"] },
       {
         model: RecipeImage,
-        where: { preview: true },
+        // where: { preview: true },
         attributes: ["url", "preview"],
       },
       { model: Review, attributes: ["stars"] },
@@ -186,7 +191,7 @@ router.get("/", async (req, res) => {
 });
 
 // add a recipe
-router.post("/", [requireAuth, ...validateRecipe], async (req, res) => {
+router.post("/", [requireAuth, imagesUpload], async (req, res, next) => {
   const { user } = req;
   const {
     name,
@@ -199,38 +204,57 @@ router.post("/", [requireAuth, ...validateRecipe], async (req, res) => {
     tags,
   } = req.body;
 
-  const newRecipe = await Recipe.create({
-    userId: user.id,
-    name,
-    description,
-    prepTime,
-    cookTime,
-    servings,
-    directions,
-  });
+  const t = await sequelize.transaction();
 
-  const file = req.files.file;
-  const bucketParams = {
-    Bucket: process.env.S3_BUCKET,
-    Key: file.name,
-    Body: file.data,
-  };
   try {
-    const data = await s3Client.send(new PutObjectCommand(bucketParams));
-    await newRecipe.addRecipeImage({ url: data.url });
-    console.log("s3 upload data :: ", data);
-  } catch (err) {
-    console.log("Error :: ", err);
-    return s3UploadError(req, res, next);
+    const newRecipe = await Recipe.create({
+      userId: user.id,
+      name,
+      description,
+      prepTime,
+      cookTime,
+      servings,
+      directions,
+    });
+
+    for (file of req.files) {
+      const bucketParams = {
+        Bucket: process.env.S3_BUCKET,
+        Key: file.originalname,
+        Body: file.buffer,
+      };
+      try {
+        await s3Client.send(new PutObjectCommand(bucketParams));
+      } catch (err) {
+        await t.rollback();
+        return s3UploadError(req, res, next);
+      }
+      await newRecipe.createRecipeImage({
+        url: formS3ObjectUrl(file.originalname),
+      });
+    }
+
+    console.log(" >>>> ingredients ::", ingredients);
+    for (ing of JSON.parse(ingredients)) {
+      console.log(" >>>> ing ::", ing);
+      await newRecipe.createRecipeIngredient(ing);
+    }
+
+    console.log(" >>>> tags ::", tags);
+    for (tag of JSON.parse(tags)) {
+      console.log(" >>>> tag ::", tag);
+      await newRecipe.createTag(tag);
+    }
+
+    await t.commit();
+
+    const recipe = await getFullRecipe(newRecipe.id);
+    if (!recipe) return recipeNotFound(req, res, next);
+    return res.status(201).json(recipe);
+  } catch (error) {
+    await t.rollback();
+    return next(error);
   }
-
-  await newRecipe.addRecipeIngredients(ingredients);
-
-  if (tags.length) await newRecipe.addTags(tags);
-
-  const recipe = await getFullRecipe(req.params.recipeId);
-  if (!recipe) return recipeNotFound(req, res, next);
-  return res.status(201).json(recipe);
 });
 
 // delete a recipe

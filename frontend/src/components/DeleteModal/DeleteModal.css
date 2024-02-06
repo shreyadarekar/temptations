@@ -1,8 +1,19 @@
 .delete-modal-container {
+  width: 350px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  padding: 12px;
+  align-items: center;
+  gap: 16px;
+}
+
+.delete-modal-title {
+  margin: 0;
+}
+
+.delete-modal-text {
+  margin: 0;
+  text-align: center;
 }
 
 .delete-modal-buttons-div {

@@ -2,14 +2,17 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./DeleteModal.css";
 
-function DeleteModal({ text, onDelete }) {
+function DeleteModal({ title, text, onDelete }) {
   const dispatch = useDispatch();
 
   const { closeModal } = useModal();
 
   return (
     <div className="delete-modal-container">
-      <h4>{text}</h4>
+      <h3 className="delete-modal-title">{title}</h3>
+
+      <p className="delete-modal-text">{text}</p>
+
       <div className="delete-modal-buttons-div">
         <button
           className="delete-modal-button delete-modal-cancel-button"

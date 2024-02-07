@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   class Cookbook extends Model {
     static associate(models) {
       Cookbook.belongsTo(models.User, { foreignKey: "userId" });
+      Cookbook.hasMany(models.RecipeCookbook, {
+        foreignKey: "cookbookId",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
     }
   }
   Cookbook.init(

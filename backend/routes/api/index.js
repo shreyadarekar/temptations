@@ -6,6 +6,7 @@ const unitsRouter = require("./units.js");
 const ingredientsRouter = require("./ingredients.js");
 const recipesRouter = require("./recipes.js");
 const reviewsRouter = require("./reviews.js");
+const cookbooksRouter = require("./cookbooks.js");
 const { restoreUser } = require("../../utils/auth.js");
 
 // Connect restoreUser middleware to the API router
@@ -19,6 +20,7 @@ router.use("/units", unitsRouter);
 router.use("/ingredients", ingredientsRouter);
 router.use("/recipes", recipesRouter);
 router.use("/reviews", reviewsRouter);
+router.use("/cookbooks", cookbooksRouter);
 
 router.post("/test", (req, res) => {
   res.json({ requestBody: req.body });

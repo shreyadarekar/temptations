@@ -1,6 +1,6 @@
 const express = require("express");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
-const { Cookbook } = require("../../db/models");
+const { Cookbook, RecipeCookbook, Recipe } = require("../../db/models");
 
 const router = express.Router();
 
@@ -15,7 +15,16 @@ const cookbookNotFound = function (_req, _res, next) {
 
 // get all current user's cookbooks
 router.get("/current", requireAuth, async (req, res, next) => {
-  const cookbooks = await Cookbook.findAll({ where: { userId: req.user.id } });
+  const cookbooks = await Cookbook.findAll({
+    where: { userId: req.user.id },
+    order: [["updatedAt", "desc"]],
+    include: [
+      {
+        model: RecipeCookbook,
+        include: [{ model: Recipe, attributes: ["id", "name"] }],
+      },
+    ],
+  });
 
   return res.json({ Cookbooks: cookbooks });
 });

@@ -4,12 +4,14 @@ import sessionReducer from "./session";
 import unitsReducer from "./units";
 import ingredientsReducer from "./ingredients";
 import recipesReducer from "./recipes";
+import cookbooksReducer from "./cookbooks";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   unit: unitsReducer,
   ingredient: ingredientsReducer,
   recipe: recipesReducer,
+  cookbook: cookbooksReducer,
 });
 
 let enhancer;

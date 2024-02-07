@@ -9,6 +9,7 @@ import { getIngredients } from "./store/ingredients";
 import { getUnits } from "./store/units";
 import RecipeForm from "./components/RecipeForm/RecipeForm";
 import UserRecipes from "./components/UserRecipes/UserRecipes";
+import UserCookbooks from "./components/UserCookbooks/UserCookbooks";
 
 function Layout() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: "/recipes/current", element: <UserRecipes /> },
       { path: "/recipes/:recipeId", element: <RecipeDetails /> },
       { path: "/recipes/:recipeId/edit", element: <RecipeForm /> },
+      { path: "/cookbooks/current", element: <UserCookbooks /> },
     ],
   },
 ]);

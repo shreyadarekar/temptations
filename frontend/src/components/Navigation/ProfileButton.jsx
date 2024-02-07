@@ -63,6 +63,13 @@ function ProfileButton({ user }) {
           >
             My Recipes
           </NavLink>
+          <NavLink
+            to="/cookbooks/current"
+            className="profile-dropdown-link"
+            onClick={closeMenu}
+          >
+            My Cookbooks
+          </NavLink>
         </div>
         <button className="logout-button" onClick={logout}>
           Log Out

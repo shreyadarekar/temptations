@@ -1,50 +1,18 @@
-.user-recipes-grid {
-  display: grid;
-  grid: auto / repeat(auto-fill, 250px);
-  max-width: 1500px;
-  margin: 10px auto;
-}
-
-.user-recipe-div {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-decoration: none;
-  color: black;
-  margin: 10px;
-  gap: 4px;
-}
-
-.user-recipe-image-div {
-  display: flex;
-  align-items: center;
-  height: 170px;
-  border: 1px solid black;
-}
-.user-recipe-image {
-  width: 100%;
-}
-
-.user-recipe-name-stars {
-  display: flex;
-  justify-content: space-between;
-}
-
-.user-recipe-buttons-div {
+.user-recipes-grid-card-buttons-div {
   display: flex;
   flex-direction: row;
   gap: 8px;
 }
-.user-recipe-button {
+.user-recipes-grid-card-button {
   border: none;
   border-radius: 4px;
   padding: 4px 8px;
 }
-.user-recipe-button-edit {
+.user-recipes-grid-card-button-edit {
   background-color: lightcoral;
   color: white;
 }
-.user-recipe-button-delete {
+.user-recipes-grid-card-button-delete {
   border: 1px solid darkred;
   background-color: white;
   color: darkred;

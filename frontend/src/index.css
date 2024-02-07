@@ -1,5 +1,9 @@
 /* TODO: Add sitewide styles */
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 }

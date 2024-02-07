@@ -21,30 +21,30 @@ function UserRecipes() {
   if (isLoading) return <h1>Loading...</h1>;
 
   return (
-    <div className="user-recipes-grid">
+    <div className="recipes-grid">
       {recipes.map((recipe) => (
-        <div key={recipe.id} className="user-recipe-div">
-          <div className="user-recipe-image-div">
+        <div key={recipe.id} className="recipes-grid-card">
+          <div className="recipes-grid-card-image-div">
             <img
-              className="user-recipe-image"
+              className="recipes-grid-card-image"
               src={recipe.RecipeImages.length ? recipe.RecipeImages[0].url : ""}
               alt="preview"
             />
           </div>
-          <div className="user-recipe-name-stars">
-            <div>
+          <div className="recipes-grid-card-title-stars-div">
+            <div className="recipes-grid-card-title">
               <span style={{ fontWeight: "bold" }}>{recipe.name}</span>
             </div>
             <div>
-              <i className="fa-solid fa-star"></i>{" "}
+              <i className="fa-solid fa-star" style={{ color: "lightcoral" }} />{" "}
               <span style={{ fontWeight: "bold" }}>
                 {recipe.avgRating > 0 ? recipe.avgRating.toFixed(1) : "New"}
               </span>
             </div>
           </div>
-          <div className="user-recipe-buttons-div">
+          <div className="user-recipes-grid-card-buttons-div">
             <button
-              className="user-recipe-button user-recipe-button-edit"
+              className="user-recipes-grid-card-button user-recipes-grid-card-button-edit"
               onClick={() => navigate(`../recipes/${recipe.id}/edit`)}
             >
               <i className="fa-solid fa-pen-to-square fa-sm" /> Edit

@@ -21,23 +21,23 @@ function Home() {
       {recipes.map((recipe) => (
         <NavLink
           key={recipe.id}
-          className="recipe-div"
+          className="recipes-grid-card"
           to={`/recipes/${recipe.id}`}
           title={recipe.name}
         >
-          <div className="recipe-image-div">
+          <div className="recipes-grid-card-image-div">
             <img
-              className="recipe-image"
+              className="recipes-grid-card-image"
               src={recipe.RecipeImages.length ? recipe.RecipeImages[0].url : ""}
               alt="preview"
             />
           </div>
-          <div className="recipe-name-stars">
-            <div>
+          <div className="recipes-grid-card-title-stars-div">
+            <div className="recipes-grid-card-title">
               <span style={{ fontWeight: "bold" }}>{recipe.name}</span>
             </div>
             <div>
-              <i className="fa-solid fa-star"></i>{" "}
+              <i className="fa-solid fa-star" style={{ color: "lightcoral" }} />{" "}
               <span style={{ fontWeight: "bold" }}>
                 {recipe.avgRating > 0 ? recipe.avgRating.toFixed(1) : "New"}
               </span>

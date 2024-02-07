@@ -1,8 +1,29 @@
 const express = require("express");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
-const { Cookbook, RecipeCookbook, Recipe } = require("../../db/models");
+const {
+  Cookbook,
+  RecipeCookbook,
+  Recipe,
+  RecipeImage,
+} = require("../../db/models");
 
 const router = express.Router();
+
+const getFullCookbook = (cookbookId) =>
+  Cookbook.findByPk(cookbookId, {
+    include: [
+      {
+        model: RecipeCookbook,
+        include: [
+          {
+            model: Recipe,
+            attributes: ["id", "name"],
+            include: [{ model: RecipeImage, attributes: ["url", "preview"] }],
+          },
+        ],
+      },
+    ],
+  });
 
 // cookbookNotFound
 const cookbookNotFound = function (_req, _res, next) {
@@ -29,6 +50,12 @@ router.get("/current", requireAuth, async (req, res, next) => {
   return res.json({ Cookbooks: cookbooks });
 });
 
+// get a cookbook
+router.get("/:cookbookId", async (req, res, next) => {
+  const cookbook = await getFullCookbook(req.params.cookbookId);
+  return res.json(cookbook);
+});
+
 // add a cookbook
 router.post("/", requireAuth, async (req, res, next) => {
   const { title } = req.body;
@@ -49,6 +76,25 @@ router.post("/", requireAuth, async (req, res, next) => {
   });
 
   return res.json(newCookbook);
+});
+
+// add recipe to cookbook
+router.put("/:cookbookId/recipes", requireAuth, async (req, res, next) => {
+  const cookbook = await Cookbook.findByPk(req.params.cookbookId);
+  if (!cookbook) return cookbookNotFound(req, res, next);
+
+  const { recipeIds } = req.body;
+
+  const dbRecipeCookbooks = await cookbook.getRecipeCookbooks();
+  for (let dbRecipeCookbook of dbRecipeCookbooks) {
+    await dbRecipeCookbook.destroy();
+  }
+  for (let recipeId of recipeIds) {
+    await cookbook.createRecipeCookbook({ recipeId });
+  }
+
+  const editedCookbook = await getFullCookbook(req.params.cookbookId);
+  return res.status(201).json(editedCookbook);
 });
 
 // edit a cookbook

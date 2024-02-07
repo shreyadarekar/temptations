@@ -1,0 +1,29 @@
+.cookbook-details-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cookbook-details-name {
+  margin: 0;
+}
+
+.cookbook-details-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cookbook-details-manage-recipes-button {
+  display: flex;
+  width: 350px;
+  height: 36px;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: white;
+  color: lightcoral;
+  border: 1px solid lightcoral;
+  border-radius: 4px;
+}

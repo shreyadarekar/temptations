@@ -24,6 +24,13 @@ export const getCookbooks = () => async (dispatch) => {
   return response;
 };
 
+export const getCookbook = (cookbookId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/cookbooks/${cookbookId}`);
+  const data = await response.json();
+  dispatch(setCookbook(data));
+  return data;
+};
+
 export const postCookbook = (cookbook) => async (dispatch) => {
   const response = await csrfFetch(`/api/cookbooks/`, {
     method: "POST",
@@ -45,6 +52,18 @@ export const putCookbook = (cookbookId, cookbook) => async (dispatch) => {
   dispatch(setCookbook(data));
   return response;
 };
+
+export const addRecipesToCookbook =
+  (cookbookId, recipeIds) => async (dispatch) => {
+    const response = await csrfFetch(`/api/cookbooks/${cookbookId}/recipes`, {
+      method: "PUT",
+      body: JSON.stringify({ recipeIds }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    dispatch(setCookbook(data));
+    return response;
+  };
 
 const initialState = { entries: {} };
 const cookbooksReducer = (state = initialState, action) => {

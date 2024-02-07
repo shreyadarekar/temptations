@@ -56,19 +56,20 @@ function ProfileButton({ user }) {
           <div>{user.email}</div>
         </div>
         <div className="profile-dropdown-group">
+          <div className="profile-dropdown-group-title">Manage</div>
           <NavLink
             to="/recipes/current"
             className="profile-dropdown-link"
             onClick={closeMenu}
           >
-            My Recipes
+            Recipes
           </NavLink>
           <NavLink
             to="/cookbooks/current"
             className="profile-dropdown-link"
             onClick={closeMenu}
           >
-            My Cookbooks
+            Cookbooks
           </NavLink>
         </div>
         <button className="logout-button" onClick={logout}>

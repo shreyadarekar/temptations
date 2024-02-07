@@ -93,8 +93,12 @@ a.active {
   flex-direction: column;
   gap: 4px;
   border-bottom: 1px solid lightgray;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.profile-dropdown-group-title {
+  font-size: 12px;
+  color: gray;
 }
 
 .profile-dropdown-link {

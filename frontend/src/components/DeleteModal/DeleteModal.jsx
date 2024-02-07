@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import "./DeleteModal.css";
 
-function DeleteModal({ title, text, onDelete }) {
+function DeleteModal({ title, text, onDelete, onDeleteSuccess }) {
   const dispatch = useDispatch();
 
   const { closeModal } = useModal();
@@ -24,7 +24,10 @@ function DeleteModal({ title, text, onDelete }) {
           className="delete-modal-button delete-modal-delete-button"
           onClick={() =>
             dispatch(onDelete())
-              .then(closeModal)
+              .then(() => {
+                if (onDeleteSuccess) onDeleteSuccess();
+                closeModal();
+              })
               .catch(async (res) => {
                 const data = await res.json();
                 if (data && data.errors) {

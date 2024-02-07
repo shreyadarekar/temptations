@@ -5,20 +5,21 @@
   gap: 8px;
 }
 
-.cookbook-details-name {
-  margin: 0;
-}
-
 .cookbook-details-heading {
   display: flex;
   justify-content: space-between;
 }
-
-.cookbook-details-manage-recipes-button {
+.cookbook-details-name {
+  margin: 0;
+}
+.cookbook-details-buttons-div {
   display: flex;
-  width: 350px;
-  height: 36px;
-  font-size: 18px;
+  gap: 4px;
+}
+.cookbook-details-button {
+  display: flex;
+  height: fit-content;
+  padding: 4px 8px;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -26,4 +27,9 @@
   color: lightcoral;
   border: 1px solid lightcoral;
   border-radius: 4px;
+}
+.cookbook-details-delete-button {
+  background-color: white;
+  color: darkred;
+  border: 1px solid darkred;
 }

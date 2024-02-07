@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
-import { getCookbook } from "../../store/cookbooks";
+import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { deleteCookbook, getCookbook } from "../../store/cookbooks";
 import OpenModalButton from "../OpenModalButton";
 import AddToCookbookFormModal from "../AddToCookbookFormModal/";
+import CookbookFormModal from "../CookbookFormModal";
 import "./CookbookDetails.css";
+import DeleteModal from "../DeleteModal";
 
 function CookbookDetails() {
   const { cookbookId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const cookbook = useSelector((state) => state.cookbook.entries[cookbookId]);
   const [shouldFetch, setShouldFetch] = useState(true);
@@ -36,16 +39,56 @@ function CookbookDetails() {
       <div className="cookbook-details-heading">
         <h1 className="cookbook-details-name">{cookbook.title}</h1>
 
-        <OpenModalButton
-          buttonText={
-            <>
-              <i className="fa-solid fa-plus-minus" /> Manage recipes in
-              cookbook
-            </>
-          }
-          className="cookbook-details-manage-recipes-button"
-          modalComponent={<AddToCookbookFormModal cookbookId={cookbookId} />}
-        />
+        <div className="cookbook-details-buttons-div">
+          <OpenModalButton
+            buttonText={
+              <>
+                <i className="fa-solid fa-pen-to-square fa-sm" /> Rename
+              </>
+            }
+            className="cookbook-details-button"
+            modalComponent={
+              <CookbookFormModal
+                cookbookId={cookbookId}
+                inTitle={cookbook.title}
+              />
+            }
+          />
+
+          <OpenModalButton
+            buttonText={
+              <>
+                <i className="fa-solid fa-plus-minus" /> Manage recipes in
+                cookbook
+              </>
+            }
+            className="cookbook-details-button"
+            modalComponent={<AddToCookbookFormModal cookbookId={cookbookId} />}
+          />
+
+          <OpenModalButton
+            buttonText={
+              <>
+                <i className="fa-solid fa-trash fa-sm" /> Delete
+              </>
+            }
+            className="cookbook-details-button cookbook-details-delete-button"
+            modalComponent={
+              <DeleteModal
+                title="Delete Cookbook"
+                text={
+                  <>
+                    Are you sure you want to delete cookbook:{" "}
+                    <span style={{ fontWeight: "bold" }}>{cookbook.title}</span>{" "}
+                    ?
+                  </>
+                }
+                onDelete={() => deleteCookbook(cookbookId)}
+                onDeleteSuccess={() => navigate(`../cookbooks/current`)}
+              />
+            }
+          />
+        </div>
       </div>
 
       <div className="recipes-grid">

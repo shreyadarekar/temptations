@@ -1,7 +1,8 @@
 import { csrfFetch } from "./csrf";
 
-const SET_COOKBOOKS = "recipes/setCookbooks";
-const SET_COOKBOOK = "recipes/setCookbook";
+const SET_COOKBOOKS = "cookbooks/setCookbooks";
+const SET_COOKBOOK = "cookbooks/setCookbook";
+const REMOVE_COOKBOOK = "cookbooks/removeCookbook";
 
 const setCookbooks = (cookbooks) => {
   return {
@@ -14,6 +15,13 @@ const setCookbook = (cookbook) => {
   return {
     type: SET_COOKBOOK,
     payload: cookbook,
+  };
+};
+
+const removeCookbook = (cookbookId) => {
+  return {
+    type: REMOVE_COOKBOOK,
+    payload: cookbookId,
   };
 };
 
@@ -65,6 +73,14 @@ export const addRecipesToCookbook =
     return response;
   };
 
+export const deleteCookbook = (recipeId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/cookbooks/${recipeId}`, {
+    method: "DELETE",
+  });
+  if (response.ok) dispatch(removeCookbook(recipeId));
+  return response;
+};
+
 const initialState = { entries: {} };
 const cookbooksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -85,6 +101,13 @@ const cookbooksReducer = (state = initialState, action) => {
           [action.payload.id]: { ...exitingCookbook, ...action.payload },
         },
       };
+    }
+
+    case REMOVE_COOKBOOK: {
+      const newEntries = { ...state.entries };
+      delete newEntries[action.payload];
+
+      return { ...state, entries: newEntries };
     }
 
     default:

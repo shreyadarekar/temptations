@@ -70,12 +70,13 @@ router.post("/", requireAuth, async (req, res, next) => {
     return next(err);
   }
 
-  const newCookbook = await Cookbook.create({
+  const dbCookbook = await Cookbook.create({
     userId: req.user.id,
     title,
   });
 
-  return res.json(newCookbook);
+  const newCookbook = await getFullCookbook(dbCookbook.id);
+  return res.status(201).json(newCookbook);
 });
 
 // add recipe to cookbook
@@ -105,12 +106,13 @@ router.put("/:cookbookId", requireAuth, async (req, res, next) => {
 
   await dbCookbook.update({ title });
 
-  return res.json(dbCookbook);
+  const editedCookbook = await getFullCookbook(req.params.cookbookId);
+  return res.status(201).json(editedCookbook);
 });
 
 // delete a cookbook
 router.delete("/:cookbookId", requireAuth, async (req, res, next) => {
-  const cookbook = await Cookbook.findByPk(req.params.cookbook);
+  const cookbook = await Cookbook.findByPk(req.params.cookbookId);
   if (!cookbook) return cookbookNotFound(req, res, next);
 
   if (cookbook.userId !== req.user.id) return forbiddenError(req, res, next);

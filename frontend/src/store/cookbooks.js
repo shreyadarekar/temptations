@@ -1,6 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 const SET_COOKBOOKS = "recipes/setCookbooks";
+const SET_COOKBOOK = "recipes/setCookbook";
 
 const setCookbooks = (cookbooks) => {
   return {
@@ -9,10 +10,39 @@ const setCookbooks = (cookbooks) => {
   };
 };
 
+const setCookbook = (cookbook) => {
+  return {
+    type: SET_COOKBOOK,
+    payload: cookbook,
+  };
+};
+
 export const getCookbooks = () => async (dispatch) => {
   const response = await csrfFetch("/api/cookbooks/current");
   const data = await response.json();
   dispatch(setCookbooks(data.Cookbooks));
+  return response;
+};
+
+export const postCookbook = (cookbook) => async (dispatch) => {
+  const response = await csrfFetch(`/api/cookbooks/`, {
+    method: "POST",
+    body: JSON.stringify(cookbook),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  dispatch(setCookbook(data));
+  return response;
+};
+
+export const putCookbook = (cookbookId, cookbook) => async (dispatch) => {
+  const response = await csrfFetch(`/api/cookbooks/${cookbookId}`, {
+    method: "PUT",
+    body: JSON.stringify(cookbook),
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await response.json();
+  dispatch(setCookbook(data));
   return response;
 };
 
@@ -25,6 +55,17 @@ const cookbooksReducer = (state = initialState, action) => {
         return { ...acc, [cb.id]: { ...exitingCookbook, ...cb } };
       }, {});
       return { ...state, entries: cookbooks };
+    }
+
+    case SET_COOKBOOK: {
+      const exitingCookbook = state.entries[action.payload.id];
+      return {
+        ...state,
+        entries: {
+          ...state.entries,
+          [action.payload.id]: { ...exitingCookbook, ...action.payload },
+        },
+      };
     }
 
     default:

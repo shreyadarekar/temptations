@@ -82,6 +82,17 @@ export const postRecipe = (recipe) => async (dispatch) => {
   return data;
 };
 
+export const putRecipe = (recipeId, recipe) => async (dispatch) => {
+  const response = await csrfFetch(`/api/recipes/${recipeId}`, {
+    method: "PUT",
+    body: recipe,
+    // headers: { "Content-Type": "multipart/form-data" },
+  });
+  const data = await response.json();
+  dispatch(setRecipe(data));
+  return data;
+};
+
 export const postReview = (recipeId, review) => async (dispatch) => {
   const response = await csrfFetch(`/api/recipes/${recipeId}/reviews`, {
     method: "POST",

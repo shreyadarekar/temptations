@@ -159,37 +159,56 @@ router.get("/:recipeId", async (req, res) => {
 });
 
 // edit a recipe
-router.put("/:recipeId", [requireAuth, ...validateRecipe], async (req, res) => {
-  const recipe = await getFullRecipe(req.params.recipeId);
-  if (!recipe) return recipeNotFound(req, res, next);
+router.put(
+  "/:recipeId",
+  [requireAuth, imagesUpload, ...validateRecipe],
+  async (req, res) => {
+    const recipe = await getFullRecipe(req.params.recipeId);
+    if (!recipe) return recipeNotFound(req, res, next);
 
-  if (recipe.userId !== req.user.id) return forbiddenError(req, res, next);
+    if (recipe.userId !== req.user.id) return forbiddenError(req, res, next);
 
-  const {
-    name,
-    description,
-    prepTime,
-    cookTime,
-    servings,
-    directions,
-    ingredients,
-    tags,
-  } = req.body;
+    const {
+      name,
+      description,
+      prepTime,
+      cookTime,
+      servings,
+      directions,
+      ingredients,
+      tags,
+    } = req.body;
 
-  await recipe.update({
-    name,
-    description,
-    prepTime,
-    cookTime,
-    servings,
-    directions,
-  });
+    await recipe.update({
+      name,
+      description,
+      prepTime,
+      cookTime,
+      servings,
+      directions,
+    });
 
-  if (tags.length) await recipe.updateTags(tags);
-  await recipe.updateRecipeIngredients(ingredients);
+    const dbTags = await recipe.getTags();
+    for (let dbTag of dbTags) {
+      await dbTag.destroy();
+    }
+    for (let tag of JSON.parse(tags)) {
+      await recipe.createTag({ title: tag });
+    }
 
-  return res.json(recipe);
-});
+    const dbRecipeIngs = await recipe.getRecipeIngredients();
+    for (let dbRecipeIng of dbRecipeIngs) {
+      await dbRecipeIng.destroy();
+    }
+    for (let ing of JSON.parse(ingredients)) {
+      await recipe.createRecipeIngredient(ing);
+    }
+
+    const editedRecipe = await getFullRecipe(req.params.recipeId);
+    if (!editedRecipe) return recipeNotFound(req, res, next);
+    return res.json(editedRecipe);
+  }
+);
 
 // get all recipes
 router.get("/", async (req, res) => {
@@ -219,7 +238,7 @@ router.get("/", async (req, res) => {
 // add a recipe
 router.post(
   "/",
-  [requireAuth, ...validateRecipe, imagesUpload],
+  [requireAuth, imagesUpload, ...validateRecipe],
   async (req, res, next) => {
     const { user } = req;
     const {
@@ -246,7 +265,7 @@ router.post(
         directions,
       });
 
-      for (file of req.files) {
+      for (let file of req.files) {
         const bucketParams = {
           Bucket: process.env.S3_BUCKET,
           Key: file.originalname,
@@ -263,16 +282,12 @@ router.post(
         });
       }
 
-      console.log(" >>>> ingredients ::", ingredients);
-      for (ing of JSON.parse(ingredients)) {
-        console.log(" >>>> ing ::", ing);
+      for (let ing of JSON.parse(ingredients)) {
         await newRecipe.createRecipeIngredient(ing);
       }
 
-      console.log(" >>>> tags ::", tags);
-      for (tag of JSON.parse(tags)) {
-        console.log(" >>>> tag ::", tag);
-        await newRecipe.createTag(tag);
+      for (let tag of JSON.parse(tags)) {
+        await newRecipe.createTag({ title: tag });
       }
 
       await t.commit();

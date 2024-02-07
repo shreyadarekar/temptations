@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRecipe, postRecipe } from "../../store/recipes";
+import { getRecipe, postRecipe, putRecipe } from "../../store/recipes";
 import "./RecipeForm.css";
 
 function RecipeForm() {
@@ -10,8 +10,8 @@ function RecipeForm() {
 
   const { recipeId } = useParams();
   const existingRecipe = useSelector((state) => state.recipe.entries[recipeId]);
-  const [shouldFetch, setShouldFetch] = useState(!!existingRecipe);
-  const [isLoading, setIsLoading] = useState(true);
+  const [shouldFetch, setShouldFetch] = useState(recipeId);
+  const [isLoading, setIsLoading] = useState(!!recipeId);
 
   const unitsEntries = useSelector((state) => state.unit.entries);
   const allUnits = Object.values(unitsEntries);
@@ -85,7 +85,12 @@ function RecipeForm() {
       recipeFormData.append("images", file);
     }
 
-    return dispatch(postRecipe(recipeFormData))
+    // if (!recipeId) {
+    return dispatch(
+      recipeId
+        ? putRecipe(recipeId, recipeFormData)
+        : postRecipe(recipeFormData)
+    )
       .then(async (res) => {
         navigate(`/recipes/${res.id}`);
       })
@@ -95,6 +100,18 @@ function RecipeForm() {
           setErrors(data.errors);
         }
       });
+    // } else {
+    //   return dispatch()
+    //     .then(async (res) => {
+    //       navigate(`/recipes/${res.id}`);
+    //     })
+    //     .catch(async (res) => {
+    //       const data = await res.json();
+    //       if (data && data.errors) {
+    //         setErrors(data.errors);
+    //       }
+    //     });
+    // }
   };
 
   const TagCheckbox = ({ label, value }) => (

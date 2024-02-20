@@ -55,10 +55,11 @@ function RecipeDetails() {
     };
   }, [dispatch, recipeId, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading && !recipe) return <h1>Loading...</h1>;
 
   const userAllowedToReview =
-    recipe.User.id !== sessionUser.id &&
+    sessionUser &&
+    sessionUser.id !== recipe.User.id &&
     !recipe.Reviews.find((r) => r.User.id === sessionUser.id);
 
   return (
@@ -177,7 +178,7 @@ function RecipeDetails() {
               </span>
             </div>
             <p>{review.content}</p>
-            {review.User.id === sessionUser.id && (
+            {sessionUser && sessionUser.id === review.User.id && (
               <div className="recipe-details-reviews-single-buttons">
                 <OpenModalButton
                   buttonText={

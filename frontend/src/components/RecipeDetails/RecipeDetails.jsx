@@ -55,7 +55,7 @@ function RecipeDetails() {
     };
   }, [dispatch, recipeId, shouldFetch]);
 
-  if (isLoading && !recipe) return <h1>Loading...</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
 
   const userAllowedToReview =
     sessionUser &&

@@ -26,6 +26,21 @@ function LoginFormModal() {
       });
   };
 
+  const onDemoLogin = (e) => {
+    e.preventDefault();
+    setErrors({});
+    return dispatch(
+      sessionActions.login({ credential: "demo@user.io", password: "password" })
+    )
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
+  };
+
   return (
     <div className="login-modal-container">
       <form className="login-modal-form" onSubmit={handleSubmit}>
@@ -55,6 +70,14 @@ function LoginFormModal() {
 
         <button className="login-modal-button" type="submit">
           Log In
+        </button>
+
+        <button
+          className="login-modal-demo-user-button"
+          type="button"
+          onClick={onDemoLogin}
+        >
+          Demo User
         </button>
       </form>
     </div>

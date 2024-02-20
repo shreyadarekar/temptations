@@ -36,3 +36,12 @@
   color: white;
   background-color: lightcoral;
 }
+
+.login-modal-demo-user-button {
+  border: none;
+  text-decoration: underline;
+  background: none;
+}
+.login-modal-demo-user-button:hover {
+  box-shadow: none;
+}

@@ -1,3 +1,121 @@
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+  height: 50px;
+  background-color: rgb(49, 46, 46);
+  border-bottom: 1px solid lightgrey;
+}
+
+.logo {
+  border-radius: 50%;
+  height: 100%;
+  margin-right: 4px;
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: lightcoral;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 0 8px;
+}
+
+a.active {
+  color: white;
+  background-color: lightcoral;
+}
+
+.nav-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload-recipe-button {
+  color: white;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.nav-header-button {
+  border-radius: 4px;
+  border: 0;
+  font-size: 14px;
+  width: 150px;
+  height: 30px;
+}
+
+.login-button {
+  color: coral;
+}
+.signup-button {
+  color: white;
+  background-color: lightcoral;
+}
+
+.profile-button {
+  background-color: inherit;
+  border: 0;
+}
+
+.profile-button:hover > i {
+  color: lightskyblue;
+}
+
+.profile-dropdown {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  border: 1px solid lightgray;
+  border-top: 0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  background: white;
+  z-index: 100;
+}
+
+.profile-dropdown-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+.profile-dropdown-group-title {
+  font-size: 12px;
+  color: gray;
+}
+
+.profile-dropdown-link {
+  display: flex;
+  width: 100%;
+  color: black !important;
+  background-color: white !important;
+  text-decoration: none;
+}
+.profile-dropdown-link:hover {
+  transform: translate3D(0, -1px, 0) scale(1.03);
+}
+
+.logout-button {
+  border-radius: 4px;
+  border: 0;
+  width: 150px;
+  height: 30px;
+  color: white;
+  background-color: lightcoral;
 }

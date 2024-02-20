@@ -1,0 +1,57 @@
+.cookbooks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+}
+
+.cookbooks-container-title {
+  margin: 0;
+}
+
+.cookbooks-container-new-cookbook-button {
+  display: flex;
+  width: 180px;
+  height: 36px;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: lightcoral;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.cookbooks-cards {
+  display: grid;
+  grid: auto / repeat(auto-fill, 260px);
+  width: 100%;
+  max-width: 1500px;
+  margin: 10px auto;
+  gap: 10px;
+}
+.cookbooks-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: black;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid lightcoral;
+  border-radius: 4px;
+}
+.cookbooks-card:hover {
+  transform: translate3D(0, -1px, 0) scale(1.03);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.cookbooks-card-header {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.cookbooks-card-title {
+  margin: 0;
+}

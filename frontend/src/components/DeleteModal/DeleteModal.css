@@ -1,0 +1,39 @@
+.delete-modal-container {
+  width: 350px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.delete-modal-title {
+  margin: 0;
+}
+
+.delete-modal-text {
+  margin: 0;
+  text-align: center;
+}
+
+.delete-modal-buttons-div {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.delete-modal-button {
+  border-radius: 4px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.delete-modal-cancel-button {
+  border: 1px solid black;
+  background-color: white;
+}
+.delete-modal-delete-button {
+  border: none;
+  color: white;
+  background-color: darkred;
+}

@@ -1,0 +1,99 @@
+.recipe-form {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 12px;
+  align-items: center;
+  width: 550px;
+  margin: auto;
+}
+
+.recipe-form > div:not(:last-child) {
+  padding-bottom: 12px;
+  border-bottom: 1px solid lightcoral;
+}
+
+.recipe-label-input-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.recipe-label {
+  font-size: 18px;
+  font-weight: bold;
+  color: lightcoral;
+}
+
+.recipe-title {
+  height: 36px;
+  font-size: 24px;
+}
+
+.recipe-time-servings {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.recipe-time-servings > .recipe-label-input-pair {
+  width: auto;
+}
+.recipe-prepTime,
+.recipe-cookTime,
+.recipe-servings {
+  width: 60px;
+}
+
+.recipe-tags-grid {
+  display: grid;
+  grid: auto / repeat(auto-fill, 100px);
+  gap: 4px;
+}
+
+.recipe-ingredients-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recipe-ingredients-header,
+.recipe-ingredients-inputs {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.recipe-ingredients-input {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+}
+.recipe-ingredients-select {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+}
+.recipe-ingredients-add-new {
+  width: 10px;
+  display: flex;
+  justify-content: center;
+}
+.recipe-ingredients-add-new-button {
+  border: none;
+  color: lightcoral;
+  align-items: center;
+  background-color: unset;
+}
+
+.recipe-submit-button {
+  display: flex;
+  width: 300px;
+  height: 36px;
+  color: white;
+  background-color: lightcoral;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+}

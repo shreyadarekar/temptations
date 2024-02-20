@@ -5,8 +5,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       RecipeIngredient.belongsTo(models.Recipe, { foreignKey: "recipeId" });
-      RecipeIngredient.hasMany(models.Ingredient, { foreignKey: "id" });
-      RecipeIngredient.hasMany(models.Unit, { foreignKey: "id" });
+      RecipeIngredient.belongsTo(models.Ingredient, {
+        foreignKey: "ingredientId",
+      });
+      RecipeIngredient.belongsTo(models.Unit, { foreignKey: "unitId" });
     }
   }
   RecipeIngredient.init(

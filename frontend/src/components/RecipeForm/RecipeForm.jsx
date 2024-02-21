@@ -352,7 +352,7 @@ function RecipeForm() {
           type="textarea"
           rows="6"
           cols="33"
-          maxLength={256}
+          maxLength={1000}
           placeholder="Add the directions to your recipe"
           value={recipe.directions}
           onChange={(e) => setRecipe({ ...recipe, directions: e.target.value })}

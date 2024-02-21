@@ -120,7 +120,7 @@ function RecipeDetails() {
           <h5>
             Total time <i className="fa-solid fa-hourglass-end"></i>
           </h5>
-          <h3>{recipe.prepTime + recipe.cookTime} min</h3>
+          <h3>{Number(recipe.prepTime) + Number(recipe.cookTime)} min</h3>
         </div>
 
         <div className="recipe-details-time-servings-single-box">

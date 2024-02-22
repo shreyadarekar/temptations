@@ -1,9 +1,9 @@
 .recipes-grid {
   display: grid;
   grid: auto / repeat(auto-fill, 260px);
-  max-width: 1500px;
   margin: 10px auto;
   gap: 5px;
+  max-width: -webkit-fill-available;
 }
 
 .recipes-grid-card {

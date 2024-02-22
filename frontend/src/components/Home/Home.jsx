@@ -11,10 +11,13 @@ function Home() {
   const recipeEntries = useSelector((state) => state.recipe.entries);
   const recipes = Object.values(recipeEntries);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState({ name: "", tags: [] });
 
   useEffect(() => {
-    dispatch(getRecipes()).then(() => setIsLoading(false));
-  }, [dispatch]);
+    dispatch(getRecipes(search.name, JSON.stringify(search.tags))).then(() =>
+      setIsLoading(false)
+    );
+  }, [dispatch, search.name, search.tags]);
 
   const TagCheckbox = ({ label, value }) => (
     <div className="home-checkbox">
@@ -22,13 +25,13 @@ function Home() {
         type="checkbox"
         id={value}
         name={value}
-        // onChange={(e) => {
-        //   let tags = recipe.tags.slice();
-        //   if (e.target.checked) tags.push(e.target.name);
-        //   else tags = tags.filter((t) => t !== e.target.name);
-        //   setRecipe({ ...recipe, tags });
-        // }}
-        // checked={recipe.tags.includes(value)}
+        onChange={(e) => {
+          let tags = search.tags.slice();
+          if (e.target.checked) tags.push(e.target.name);
+          else tags = tags.filter((t) => t !== e.target.name);
+          setSearch({ ...search, tags });
+        }}
+        checked={search.tags.includes(value)}
       />
       <label className="home-checkbox-label" htmlFor={value}>
         {label}
@@ -44,6 +47,8 @@ function Home() {
         <input
           className="home-search-input"
           placeholder="Search by recipe name..."
+          value={search.name}
+          onChange={(e) => setSearch({ ...search, name: e.target.value })}
         />
       </div>
       <div className="home-partition-container">

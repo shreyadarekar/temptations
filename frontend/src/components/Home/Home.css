@@ -1,0 +1,46 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.home-search-container {
+  display: flex;
+  margin: auto;
+}
+.home-search-input {
+  height: 36px;
+  width: 400px;
+}
+
+.home-partition-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.home-filters-container {
+  width: 30%;
+  min-width: 200px;
+  padding: 12px;
+}
+
+.home-tags-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: lightcoral;
+  padding: 8px;
+  border-radius: 4px;
+}
+.home-checkbox {
+  display: flex;
+  align-items: center;
+}
+.home-checkbox-label {
+  font-size: 18px;
+  padding: 4px;
+}
+
+.home-recipes-container {
+  width: 100%;
+}

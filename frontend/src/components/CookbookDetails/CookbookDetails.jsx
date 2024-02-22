@@ -5,8 +5,9 @@ import { deleteCookbook, getCookbook } from "../../store/cookbooks";
 import OpenModalButton from "../OpenModalButton";
 import AddToCookbookFormModal from "../AddToCookbookFormModal/";
 import CookbookFormModal from "../CookbookFormModal";
-import "./CookbookDetails.css";
+import Loading from "../Loading/";
 import DeleteModal from "../DeleteModal";
+import "./CookbookDetails.css";
 
 function CookbookDetails() {
   const { cookbookId } = useParams();
@@ -32,7 +33,7 @@ function CookbookDetails() {
     };
   }, [cookbookId, dispatch, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="cookbook-details-container">

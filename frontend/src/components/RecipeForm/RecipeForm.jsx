@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipe, postRecipe, putRecipe } from "../../store/recipes";
+import Loading from "../Loading/";
 import "./RecipeForm.css";
 
 function RecipeForm() {
@@ -66,7 +67,7 @@ function RecipeForm() {
     };
   }, [dispatch, existingRecipe, recipeId, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   const handleSubmit = (e) => {
     e.preventDefault();

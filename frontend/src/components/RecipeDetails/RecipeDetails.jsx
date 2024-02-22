@@ -4,10 +4,11 @@ import { useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import StarRatings from "react-star-ratings";
 import { deleteReview, getRecipe } from "../../store/recipes";
-import "./RecipeDetails.css";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
-import ReviewFormModal from "../ReviewFormModal/ReviewFormModal";
+import Loading from "../Loading/";
+import ReviewFormModal from "../ReviewFormModal";
+import "./RecipeDetails.css";
 
 const formatRecipeDate = (date) => {
   let d = new Date(date),
@@ -55,7 +56,7 @@ function RecipeDetails() {
     };
   }, [dispatch, recipeId, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   const userAllowedToReview =
     sessionUser &&

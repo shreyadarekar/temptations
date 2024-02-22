@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { getRecipes } from "../../store/recipes";
+import Loading from "../Loading/";
 import "./Home.css";
 
 function Home() {
@@ -14,7 +15,7 @@ function Home() {
     dispatch(getRecipes()).then(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="recipes-grid">

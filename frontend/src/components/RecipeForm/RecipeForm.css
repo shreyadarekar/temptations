@@ -84,6 +84,9 @@
   align-items: center;
   background-color: unset;
 }
+.recipe-ingredients-add-new-button:hover {
+  box-shadow: none;
+}
 
 .recipe-submit-button {
   display: flex;

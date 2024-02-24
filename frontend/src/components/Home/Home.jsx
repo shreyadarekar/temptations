@@ -44,15 +44,20 @@ function Home() {
   return (
     <div className="home-container">
       <div className="home-search-container">
+        <i
+          className="fa-solid fa-magnifying-glass home-search-icon"
+          style={{ color: "#797c81" }}
+        ></i>
         <input
           className="home-search-input"
-          placeholder="Search by recipe name..."
+          placeholder="Search by recipe name (e.g. pasta, etc.)"
           value={search.name}
           onChange={(e) => setSearch({ ...search, name: e.target.value })}
         />
       </div>
       <div className="home-partition-container">
         <div className="home-filters-container">
+          <h4 className="home-tags-header">Filter by tags:</h4>
           <div id="tags" className="home-tags-grid">
             {TAGS.map((tag) => (
               <TagCheckbox

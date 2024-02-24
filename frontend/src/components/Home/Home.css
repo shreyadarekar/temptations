@@ -7,10 +7,22 @@
 .home-search-container {
   display: flex;
   margin: auto;
+  align-items: center;
+}
+.home-search-icon {
+  padding: 9px;
+  border: 1px solid lightgray;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 .home-search-input {
   height: 36px;
-  width: 400px;
+  width: 600px;
+  border: 1px solid lightgray;
+  border-left: 0px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 12px;
 }
 
 .home-partition-container {
@@ -24,11 +36,13 @@
   padding: 12px;
 }
 
+.home-tags-header {
+  text-decoration: underline;
+}
 .home-tags-grid {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  background-color: lightcoral;
   padding: 8px;
   border-radius: 4px;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import StarRatings from "react-star-ratings";
 import { deleteReview, getRecipe } from "../../store/recipes";
@@ -65,7 +65,18 @@ function RecipeDetails() {
 
   return (
     <div className="recipe-details-container">
-      <h1 className="recipe-details-name">{recipe.name}</h1>
+      <div className="recipe-details-header">
+        <h1 className="recipe-details-name">{recipe.name}</h1>
+        {sessionUser && sessionUser.id === recipe.User.id && (
+          <NavLink
+            key={recipe.id}
+            className="recipe-details-edit"
+            to={`/recipes/${recipe.id}/edit`}
+          >
+            <i className="fa-regular fa-pen-to-square"></i>
+          </NavLink>
+        )}
+      </div>
 
       <div className="recipe-details-reviews-summary">
         <StarRatings

@@ -6,8 +6,21 @@
   gap: 8px;
 }
 
+.recipe-details-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 .recipe-details-name {
   margin: 0;
+}
+.recipe-details-edit {
+  padding: 4px;
+  color: lightcoral;
+}
+.recipe-details-edit.active {
+  color: lightcoral;
+  background-color: unset;
 }
 
 .recipe-details-upload-by-p {

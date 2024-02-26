@@ -1,6 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
+const Op = require("sequelize").Op;
 const { requireAuth, forbiddenError } = require("../../utils/auth");
 const {
   s3Client,
@@ -212,17 +213,26 @@ router.put(
 
 // get all recipes
 router.get("/", async (req, res) => {
+  const { name, tags } = req.query;
+  const whereRecipes = {};
+  if (name) whereRecipes.name = { [Op.like]: `%${name}%` };
+  const whereTags = {};
+  if (tags) {
+    const tagsArr = JSON.parse(tags);
+    if (tagsArr.length) whereTags.title = { [Op.in]: tagsArr };
+  }
+
   const recipes = await Recipe.findAll({
+    where: whereRecipes,
     order: [["updatedAt", "desc"]],
     include: [
       { model: User, attributes: ["username"] },
       {
         model: RecipeImage,
-        // where: { preview: true },
         attributes: ["url", "preview"],
       },
       { model: Review, attributes: ["stars"] },
-      { model: Tag, attributes: ["title"] },
+      { model: Tag, attributes: ["title"], where: whereTags },
     ],
   });
 

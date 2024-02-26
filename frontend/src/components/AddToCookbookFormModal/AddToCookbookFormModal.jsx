@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
+import Loading from "../Loading/";
 import { addRecipesToCookbook, getCookbook } from "../../store/cookbooks";
-import "./AddToCookbookFormModal.css";
 import { getRecipes } from "../../store/recipes";
+import "./AddToCookbookFormModal.css";
 
 function AddToCookbookFormModal({ cookbookId }) {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ function AddToCookbookFormModal({ cookbookId }) {
     </div>
   );
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="add-to-cookbook-modal-container">

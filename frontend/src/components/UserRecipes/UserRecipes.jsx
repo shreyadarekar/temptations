@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteRecipe, getUserRecipes } from "../../store/recipes";
-import "./UserRecipes.css";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
+import Loading from "../Loading/";
+import "./UserRecipes.css";
 
 function UserRecipes() {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ function UserRecipes() {
     dispatch(getUserRecipes()).then(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="recipes-grid">

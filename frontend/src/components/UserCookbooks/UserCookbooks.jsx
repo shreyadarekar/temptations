@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
-import "./UserCookbooks.css";
 import { getCookbooks } from "../../store/cookbooks";
 import OpenModalButton from "../OpenModalButton";
 import CookbookFormModal from "../CookbookFormModal";
+import Loading from "../Loading/";
+import "./UserCookbooks.css";
 
 function UserCookbooks() {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ function UserCookbooks() {
     };
   }, [dispatch, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="cookbooks-container">

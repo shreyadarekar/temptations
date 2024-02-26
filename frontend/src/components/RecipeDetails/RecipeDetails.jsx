@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import StarRatings from "react-star-ratings";
 import { deleteReview, getRecipe } from "../../store/recipes";
-import "./RecipeDetails.css";
 import OpenModalButton from "../OpenModalButton";
 import DeleteModal from "../DeleteModal";
-import ReviewFormModal from "../ReviewFormModal/ReviewFormModal";
+import Loading from "../Loading/";
+import ReviewFormModal from "../ReviewFormModal";
+import "./RecipeDetails.css";
 
 const formatRecipeDate = (date) => {
   let d = new Date(date),
@@ -55,7 +56,7 @@ function RecipeDetails() {
     };
   }, [dispatch, recipeId, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   const userAllowedToReview =
     sessionUser &&
@@ -64,7 +65,18 @@ function RecipeDetails() {
 
   return (
     <div className="recipe-details-container">
-      <h1 className="recipe-details-name">{recipe.name}</h1>
+      <div className="recipe-details-header">
+        <h1 className="recipe-details-name">{recipe.name}</h1>
+        {sessionUser && sessionUser.id === recipe.User.id && (
+          <NavLink
+            key={recipe.id}
+            className="recipe-details-edit"
+            to={`/recipes/${recipe.id}/edit`}
+          >
+            <i className="fa-regular fa-pen-to-square"></i>
+          </NavLink>
+        )}
+      </div>
 
       <div className="recipe-details-reviews-summary">
         <StarRatings
@@ -120,7 +132,7 @@ function RecipeDetails() {
           <h5>
             Total time <i className="fa-solid fa-hourglass-end"></i>
           </h5>
-          <h3>{recipe.prepTime + recipe.cookTime} min</h3>
+          <h3>{Number(recipe.prepTime) + Number(recipe.cookTime)} min</h3>
         </div>
 
         <div className="recipe-details-time-servings-single-box">

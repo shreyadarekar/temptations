@@ -57,8 +57,8 @@ const removeRecipe = (recipeId) => {
   };
 };
 
-export const getRecipes = () => async (dispatch) => {
-  const response = await csrfFetch("/api/recipes");
+export const getRecipes = (name, tags) => async (dispatch) => {
+  const response = await csrfFetch(`/api/recipes?name=${name}&tags=${tags}`);
   const data = await response.json();
   dispatch(setRecipes(data.Recipes));
   return response;

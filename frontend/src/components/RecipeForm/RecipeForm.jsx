@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipe, postRecipe, putRecipe } from "../../store/recipes";
+import Loading from "../Loading/";
 import "./RecipeForm.css";
+import { TAGS } from "../../store/tags";
 
 function RecipeForm() {
   const dispatch = useDispatch();
@@ -66,7 +68,7 @@ function RecipeForm() {
     };
   }, [dispatch, existingRecipe, recipeId, shouldFetch]);
 
-  if (isLoading) return <h1>Loading...</h1>;
+  if (isLoading) return <Loading />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -227,16 +229,9 @@ function RecipeForm() {
         </span>
 
         <div id="tags" className="recipe-tags-grid">
-          <TagCheckbox label="Indian" value="indian" />
-          <TagCheckbox label="American" value="american" />
-          <TagCheckbox label="Italian" value="italian" />
-          <TagCheckbox label="Chinese" value="chinese" />
-          <TagCheckbox label="Thai" value="thai" />
-          <TagCheckbox label="Korean" value="korean" />
-          <TagCheckbox label="Seafood" value="seafood" />
-          <TagCheckbox label="Gluten-free" value="gluten-free" />
-          <TagCheckbox label="Vegan" value="vegan" />
-          <TagCheckbox label="Non-dairy" value="non-dairy" />
+          {TAGS.map((tag) => (
+            <TagCheckbox key={tag.value} label={tag.label} value={tag.value} />
+          ))}
         </div>
       </div>
 

@@ -18,6 +18,7 @@ const units = [
   "ounce",
   "clove",
   "pound",
+  "slices",
 ];
 
 /** @type {import('sequelize-cli').Migration} */

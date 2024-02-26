@@ -1,7 +1,7 @@
 const express = require("express");
 const { check } = require("express-validator");
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
-const Op = require("sequelize").Op;
+const { Op, where, fn, col } = require("sequelize");
 const { requireAuth, forbiddenError } = require("../../utils/auth");
 const {
   s3Client,
@@ -214,8 +214,15 @@ router.put(
 // get all recipes
 router.get("/", async (req, res) => {
   const { name, tags } = req.query;
-  const whereRecipes = {};
-  if (name) whereRecipes.name = { [Op.like]: `%${name}%` };
+  let whereRecipes = {};
+  // if (name) whereRecipes.name = { [Op.like]: `%${name}%` };
+  if (name) {
+    whereRecipes = where(
+      fn("lower", col("name")),
+      "like",
+      `%${name.toLowerCase()}%`
+    );
+  }
   const whereTags = {};
   if (tags) {
     const tagsArr = JSON.parse(tags);

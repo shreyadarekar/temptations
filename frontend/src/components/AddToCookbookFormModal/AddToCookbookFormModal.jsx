@@ -21,7 +21,7 @@ function AddToCookbookFormModal({ cookbookId }) {
   useEffect(() => {
     if (shouldFetch) {
       setIsLoading(true);
-      dispatch(getRecipes()).then(() =>
+      dispatch(getRecipes("", "")).then(() =>
         dispatch(getCookbook(cookbookId)).then((cb) => {
           setRecipeIds(cb.RecipeCookbooks.map((rc) => rc.Recipe.id));
           setShouldFetch(false);

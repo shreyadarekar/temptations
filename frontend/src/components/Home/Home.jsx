@@ -14,8 +14,11 @@ function Home() {
   const [search, setSearch] = useState({ name: "", tags: [] });
 
   useEffect(() => {
-    dispatch(getRecipes(search.name, JSON.stringify(search.tags))).then(() =>
-      setIsLoading(false)
+    dispatch(getRecipes(search.name, JSON.stringify(search.tags))).then(
+      // () => setIsLoading(false)
+      setTimeout(function () {
+        setIsLoading(false);
+      }, 2000)
     );
   }, [dispatch, search.name, search.tags]);
 

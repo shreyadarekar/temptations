@@ -1,6 +1,6 @@
 # Temptations
 
-Temptations is an app to manage tempting recipes.
+Temptations is an app to upload, manage and review tempting recipes.
 
 <br>
 
@@ -17,7 +17,7 @@ Temptations is an app to manage tempting recipes.
 
 ## Link to Live Site
 
-[Temptations Live Site]()
+Hosted on Render:[[Temptations Live Site]()](https://temptations.onrender.com/)
 
 <br>
 
@@ -84,13 +84,3 @@ Temptations is a website which will let users add their own recipes and provide 
 
 [Feature List](https://github.com/shreyadarekar/temptations/wiki/MVP-List)
 
-<br>
-
-## Screenshots
-
-<img src="./images/homepage.png" style="width:600px;" />
-<img src="./images/login.png" style="width:600px;" />
-<img src="./images/signup.png" style="width:600px;" />
-<img src="./images/new-spot.png" style="width:600px;" />
-<img src="./images/single-spot.png" style="width:600px;" />
-<img src="./images/manage-spots.png" style="width:600px;" />

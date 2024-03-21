@@ -17,7 +17,7 @@ Temptations is an app to upload, manage and review tempting recipes.
 
 ## Link to Live Site
 
-Hosted on Render:[[Temptations Live Site]()](https://temptations.onrender.com/)
+Hosted on Render: [Temptations](https://temptations.onrender.com/)
 
 <br>
 
